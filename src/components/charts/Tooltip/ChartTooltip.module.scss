@@ -1,0 +1,38 @@
+@use "@/styles/tokens" as *;
+
+.root {
+  min-width: 140px;
+  padding: $space-3;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  background: var(--color-bg-base);
+  box-shadow: var(--shadow-card);
+}
+
+.label {
+  margin: 0 0 $space-2;
+  color: var(--color-text-tertiary);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  color: var(--color-text-primary);
+}
+
+.swatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}

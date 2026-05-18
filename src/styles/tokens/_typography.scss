@@ -1,0 +1,92 @@
+@use 'fonts' as *;
+
+@mixin _text-sans(
+  $size,
+  $line-height,
+  $weight: $font-weight-book,
+  $letter-spacing: $letter-spacing-normal
+) {
+  font-family: $font-family-sans;
+  font-size: $size;
+  line-height: $line-height;
+  font-weight: $weight;
+  letter-spacing: $letter-spacing;
+}
+
+@mixin _text-mono(
+  $size,
+  $line-height,
+  $weight: $font-weight-book,
+  $letter-spacing: $letter-spacing-tight-0-5,
+  $uppercase: true
+) {
+  font-family: $font-family-mono;
+  font-size: $size;
+  line-height: $line-height;
+  font-weight: $weight;
+  letter-spacing: $letter-spacing;
+
+  @if $uppercase {
+    text-transform: uppercase;
+  }
+}
+
+@mixin text-heading-3-book {
+  @include _text-sans(56px, 64px, $font-weight-book, $letter-spacing-tight-2);
+}
+
+@mixin text-heading-4-book {
+  @include _text-sans(48px, 56px, $font-weight-book, $letter-spacing-tight-1-5);
+}
+
+@mixin text-heading-5-book {
+  @include _text-sans(40px, 48px, $font-weight-book, $letter-spacing-tight-1-5);
+}
+
+@mixin text-heading-6-regular {
+  @include _text-sans(32px, 36px, $font-weight-regular, $letter-spacing-tight-1-5);
+}
+
+@mixin text-heading-7-regular {
+  @include _text-sans(24px, 28px, $font-weight-regular, $letter-spacing-normal);
+}
+
+@mixin text-heading-8-book {
+  @include _text-sans(20px, 24px, $font-weight-book, $letter-spacing-normal);
+}
+
+@mixin text-heading-8-medium {
+  @include _text-sans(20px, 24px, $font-weight-medium, $letter-spacing-normal);
+}
+
+@mixin text-body-2-book {
+  @include _text-sans(16px, 24px, $font-weight-book, $letter-spacing-normal);
+}
+
+@mixin text-body-2-medium {
+  @include _text-sans(16px, 24px, $font-weight-medium, $letter-spacing-normal);
+}
+
+@mixin text-body-3-book {
+  @include _text-sans(14px, 20px, $font-weight-book, $letter-spacing-normal);
+}
+
+@mixin text-body-3-regular {
+  @include _text-sans(14px, 20px, $font-weight-regular, $letter-spacing-normal);
+}
+
+@mixin text-body-4-book {
+  @include _text-sans(14px, 20px, $font-weight-book, $letter-spacing-normal);
+}
+
+@mixin text-body-4-zagma {
+  @include _text-mono(12px, 14px);
+}
+
+@mixin text-body-4-zagma-lg {
+  @include _text-mono(16.15px, 18.84px);
+}
+
+@mixin text-body-5-book {
+  @include _text-mono(12px, 14px, $uppercase: false);
+}

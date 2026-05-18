@@ -1,0 +1,349 @@
+@use "@/styles/tokens" as *;
+@use "@/styles/mixins" as *;
+
+$analysis-content-padding: 40px;
+$analysis-card-content-max: 1440px;
+$analysis-stage-width: 1360px;
+$analysis-card-height: 530px;
+$analysis-composition-width: 1360;
+$analysis-composition-height: 1097;
+$analysis-overlay-top: 127;
+$analysis-overlay-height: 337;
+$analysis-portrait-height: 120%;
+$analysis-edge-blur-max: 4px;
+$analysis-edge-blur-fade-stop: 40%;
+$analysis-grid-gap: $space-3;
+$analysis-cluster-gap: clamp(192px, 21vw, 336px);
+$scatter-chart-width: 286;
+$scatter-chart-height: 338;
+$scatter-bar-width: 282;
+$scatter-bar-height: 338;
+$bell-curve-width: 286;
+$bell-curve-height: 198;
+$half-blocks-width: 285;
+$half-blocks-height: 127;
+$feature-width: 353;
+$feature-height: 166;
+$container-width: 286;
+$container-height: 157;
+
+@mixin sized-chart-cell($width, $height, $align-items: flex-start) {
+  width: auto;
+  min-width: auto;
+  aspect-ratio: #{$width} / #{$height};
+  justify-content: flex-start;
+  align-items: $align-items;
+}
+
+.cardContent {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  width: 100%;
+  max-width: $analysis-card-content-max;
+  min-height: $analysis-card-height;
+  margin-inline: auto;
+  padding-inline: $analysis-content-padding;
+  gap: 10px;
+  isolation: isolate;
+
+  @include up(md) {
+    overflow: visible;
+  }
+
+  @include down(md) {
+    flex: none;
+    min-height: 360px;
+    padding-inline: $space-4;
+  }
+}
+
+.root {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: 0;
+}
+
+.stage {
+  position: relative;
+  display: flex;
+  flex: 1;
+  width: 100%;
+  max-width: $analysis-stage-width;
+  min-height: 280px;
+  margin-inline: auto;
+  overflow: hidden;
+
+  @include up(md) {
+    min-height: $analysis-card-height;
+    overflow: visible;
+  }
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.visualTrack {
+  position: relative;
+  width: 100%;
+  max-width: $analysis-stage-width;
+  aspect-ratio: #{$analysis-composition-width} / #{$analysis-composition-height};
+  max-height: 100%;
+  margin-inline: auto;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.visualFrame {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 1;
+  width: 100%;
+  height: $analysis-portrait-height;
+  pointer-events: none;
+}
+
+.visual {
+  object-fit: contain;
+  object-position: bottom center;
+}
+
+.overlayGrid {
+  position: absolute;
+  top: #{$analysis-overlay-top}px;
+  left: 50%;
+  z-index: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  width: max-content;
+  max-width: none;
+  height: #{$analysis-overlay-height}px;
+  overflow: visible;
+  gap: $analysis-cluster-gap;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+%panel-cluster {
+  display: grid;
+  min-height: 0;
+  grid-template-columns: auto auto;
+  grid-template-rows: minmax(0, 1.6fr) minmax(0, 1fr);
+  column-gap: $analysis-grid-gap;
+  row-gap: $analysis-grid-gap;
+  align-items: stretch;
+  justify-items: start;
+}
+
+.chartsCluster {
+  @extend %panel-cluster;
+  grid-template-areas:
+    "scatterChart bellCurve"
+    "scatterChart halfBlocks";
+}
+
+.metricsCluster {
+  @extend %panel-cluster;
+  overflow: visible;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas:
+    "scatterBar feature"
+    "scatterBar container";
+}
+
+.gridCell {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  align-items: stretch;
+  justify-content: center;
+
+  &[data-grid-area="scatterChart"] {
+    @include sized-chart-cell($scatter-chart-width, $scatter-chart-height);
+    grid-area: scatterChart;
+  }
+
+  &[data-grid-area="bellCurve"] {
+    @include sized-chart-cell($bell-curve-width, $bell-curve-height);
+    grid-area: bellCurve;
+  }
+
+  &[data-grid-area="halfBlocks"] {
+    @include sized-chart-cell($half-blocks-width, $half-blocks-height, flex-end);
+    grid-area: halfBlocks;
+  }
+
+  &[data-grid-area="scatterBar"] {
+    @include sized-chart-cell($scatter-bar-width, $scatter-bar-height);
+    z-index: 2;
+    grid-area: scatterBar;
+    pointer-events: auto;
+  }
+
+  &[data-grid-area="feature"] {
+    @include sized-chart-cell($feature-width, $feature-height);
+    z-index: 1;
+    grid-area: feature;
+    overflow: visible;
+  }
+
+  &[data-grid-area="container"] {
+    @include sized-chart-cell($container-width, $container-height, flex-end);
+    grid-area: container;
+  }
+}
+
+.gridChart {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.gridCell[data-grid-area="scatterChart"],
+.gridCell[data-grid-area="scatterBar"] {
+  .gridChart {
+    object-position: center center;
+  }
+}
+
+.gridCell[data-grid-area="bellCurve"],
+.gridCell[data-grid-area="feature"] {
+  .gridChart {
+    object-position: top left;
+  }
+}
+
+.gridCell[data-grid-area="halfBlocks"],
+.gridCell[data-grid-area="container"] {
+  .gridChart {
+    object-position: bottom left;
+  }
+}
+
+.gridCell:is(
+  [data-grid-area="scatterChart"],
+  [data-grid-area="scatterBar"],
+  [data-grid-area="bellCurve"],
+  [data-grid-area="halfBlocks"],
+  [data-grid-area="feature"],
+  [data-grid-area="container"]
+) {
+  .gridChart {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: contain;
+  }
+}
+
+@mixin analysis-edge-blur-mask($direction: left) {
+  @if $direction == left {
+    -webkit-mask-image: linear-gradient(
+      to left,
+      transparent 0%,
+      #000 $analysis-edge-blur-fade-stop
+    );
+    mask-image: linear-gradient(
+      to left,
+      transparent 0%,
+      #000 $analysis-edge-blur-fade-stop
+    );
+  } @else {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      #000 $analysis-edge-blur-fade-stop
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      #000 $analysis-edge-blur-fade-stop
+    );
+  }
+}
+
+.blurLeft,
+.blurRight {
+  position: absolute;
+  top: calc(50% - 64px);
+  z-index: 2;
+  width: min(400px, 30vw);
+  height: min(830px, 110%);
+  pointer-events: none;
+  background: rgb(255 255 255 / 0.001);
+  -webkit-backdrop-filter: blur($analysis-edge-blur-max);
+  backdrop-filter: blur($analysis-edge-blur-max);
+  transform: translateY(-50%);
+}
+
+.blurLeft {
+  left: -240px;
+  @include analysis-edge-blur-mask(left);
+}
+
+.blurRight {
+  right: -240px;
+  @include analysis-edge-blur-mask(right);
+}
+
+@include down(md) {
+  .blurLeft,
+  .blurRight {
+    display: none;
+  }
+
+  .canvas {
+    position: relative;
+    inset: auto;
+    align-items: center;
+    min-height: 280px;
+  }
+
+  .visualTrack {
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 732 / 1097;
+  }
+
+  .visualFrame {
+    height: $analysis-portrait-height;
+  }
+
+  .overlayGrid {
+    top: calc(#{$analysis-overlay-top} / #{$analysis-composition-height} * 100%);
+    flex-direction: column;
+    align-items: center;
+    width: max-content;
+    max-width: 100%;
+    height: auto;
+    max-height: none;
+    gap: $analysis-cluster-gap;
+    transform: translateX(-50%);
+  }
+
+  .chartsCluster {
+    grid-template-areas:
+      "scatterChart bellCurve"
+      "halfBlocks halfBlocks";
+  }
+
+  .metricsCluster {
+    grid-template-areas:
+      "scatterBar feature"
+      "container container";
+  }
+}

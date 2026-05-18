@@ -1,0 +1,133 @@
+@use "@/styles/tokens" as *;
+@use "@/styles/mixins" as *;
+
+$analysis-content-padding: 40px;
+$analysis-frame-max: 1840px;
+$analysis-section-min-height: 832px;
+$analysis-header-min-height: 214px;
+$analysis-card-height: 530px;
+
+$analysis-border: 1px solid var(--color-border-glass);
+
+.root {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: $analysis-section-min-height;
+  background: var(--color-primary-400);
+  overflow: hidden;
+}
+
+.ambient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.ambientImage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 820px;
+  max-width: none;
+  height: 1000px;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  filter: blur(250px);
+
+  @include down(md) {
+    width: min(520px, 95vw);
+    height: auto;
+    aspect-ratio: 438 / 474;
+    filter: blur(120px);
+  }
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  min-height: $analysis-section-min-height;
+  padding-inline: $analysis-content-padding;
+  gap: 10px;
+}
+
+.frame {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  max-width: $analysis-frame-max;
+  min-height: $analysis-section-min-height;
+  margin-inline: auto;
+  border-inline: $analysis-border;
+  @include full-bleed-horizontal-rule(both, $analysis-border);
+}
+
+.glowUp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: $analysis-header-min-height;
+  padding: 56px 0 0;
+  gap: $space-6;
+}
+
+.label {
+  width: 100%;
+  gap: $space-4;
+
+  :global([data-section-badge]) {
+    border-color: var(--color-border-glass);
+    background: transparent;
+    color: var(--color-text-button-primary);
+  }
+
+  :global(.heading-4) {
+    max-width: 556px;
+    margin-inline: auto;
+    color: var(--color-text-button-primary);
+  }
+
+  :global(.body-2) {
+    max-width: 490px;
+    margin-inline: auto;
+    color: var(--color-text-button-primary);
+    opacity: 0.7;
+  }
+}
+
+.cardContainer {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: $analysis-card-height;
+}
+
+@include down(md) {
+  .root,
+  .content,
+  .frame {
+    min-height: auto;
+  }
+
+  .glowUp {
+    min-height: auto;
+    padding-top: $space-7;
+  }
+
+  .cardContainer {
+    min-height: 360px;
+  }
+}

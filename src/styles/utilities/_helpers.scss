@@ -1,0 +1,115 @@
+@use '../tokens/spacing' as *;
+@use '../tokens/typography' as type;
+@use '../mixins/media' as *;
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.container {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: $space-3;
+
+  @include up(sm) {
+    padding-inline: $space-4;
+  }
+
+  @include up(md) {
+    padding-inline: $space-6;
+  }
+
+  @include up(lg) {
+    padding-inline: $space-7;
+  }
+
+  @include up(xl) {
+    padding-inline: $space-8;
+  }
+}
+
+.heading-3 {
+  @include type.text-heading-3-book;
+
+  @include down(sm) {
+    font-size: 40px;
+    line-height: 48px;
+  }
+}
+
+.heading-4 {
+  @include type.text-heading-4-book;
+
+  @include down(sm) {
+    font-size: 32px;
+    line-height: 40px;
+    letter-spacing: -0.01em;
+  }
+}
+
+.heading-5 {
+  @include type.text-heading-5-book;
+
+  @include down(sm) {
+    font-size: 28px;
+    line-height: 34px;
+  }
+}
+
+.heading-6 {
+  @include type.text-heading-6-regular;
+}
+
+.heading-7 {
+  @include type.text-heading-7-regular;
+}
+
+.heading-8,
+.heading-8-medium {
+  @include type.text-heading-8-medium;
+}
+
+.heading-8-book {
+  @include type.text-heading-8-book;
+}
+
+.body-2 {
+  @include type.text-body-2-book;
+}
+
+.body-2-medium {
+  @include type.text-body-2-medium;
+}
+
+.body-3 {
+  @include type.text-body-3-book;
+}
+
+.body-3-regular {
+  @include type.text-body-3-regular;
+}
+
+.body-4 {
+  @include type.text-body-4-book;
+}
+
+.body-4-zagma {
+  @include type.text-body-4-zagma;
+}
+
+.body-4-zagma-lg {
+  @include type.text-body-4-zagma-lg;
+}
+
+.body-5 {
+  @include type.text-body-5-book;
+}

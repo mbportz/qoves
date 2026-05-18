@@ -1,0 +1,23 @@
+@use "@/styles/tokens" as *;
+@use "@/styles/mixins" as *;
+
+.root {
+  padding-block: $space-6;
+  border-top: 1px solid var(--color-border-light);
+
+  @include up(md) {
+    padding-block: $space-8;
+  }
+
+  &:first-of-type {
+    border-top: none;
+  }
+}
+
+.content {
+  margin-top: $space-5;
+
+  @include up(md) {
+    margin-top: $space-7;
+  }
+}

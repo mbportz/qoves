@@ -1,0 +1,45 @@
+@use "@/styles/tokens" as *;
+@use "@/styles/mixins" as *;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  width: 100%;
+  max-width: 100%;
+
+  @include up(md) {
+    gap: $space-4;
+    max-width: 659px;
+  }
+}
+
+.center {
+  align-items: center;
+  text-align: center;
+
+  .subtitle {
+    text-align: center;
+  }
+}
+
+.title {
+  margin: 0;
+  max-width: 900px;
+}
+
+.titleAccent {
+  font: inherit;
+  letter-spacing: inherit;
+  color: var(--section-label-title-accent-color, var(--color-text-disabled));
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--color-text-secondary);
+  max-width: 100%;
+
+  @include up(md) {
+    max-width: 608px;
+  }
+}

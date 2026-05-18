@@ -1,0 +1,47 @@
+@use '../tokens/colors' as colors;
+
+:root {
+  --color-bg-base: #{colors.$color-bg-base};
+  --color-bg-secondary-hover: #{colors.$color-bg-secondary-hover};
+  --color-primary-50: #{colors.$color-primary-50};
+  --color-primary-400: #{colors.$color-primary-400};
+  --color-primary-600: #{colors.$color-primary-600};
+  --color-gray-50: #{colors.$color-gray-50};
+
+  --color-text-primary: #{colors.$color-text-primary};
+  --color-text-secondary: #{colors.$color-text-secondary};
+  --color-text-tertiary: #{colors.$color-text-tertiary};
+  --color-text-disabled: #{colors.$color-text-disabled};
+  --color-text-button-secondary: #{colors.$color-text-button-secondary};
+  --color-text-button-primary-disabled: #{colors.$color-text-button-primary-disabled};
+  --color-text-button-primary: #{colors.$color-text-button-primary};
+
+  --color-border-base: #{colors.$color-border-base};
+  --color-border-primary-muted: #{colors.$color-border-primary-muted};
+  --color-border-badge: #{colors.$color-border-badge};
+  --color-border-card: #{colors.$color-border-card};
+  --color-border-glass: #{colors.$color-border-glass};
+
+  --color-glass-surface: #{colors.$color-glass-surface};
+  --color-glass-surface-subtle: #{colors.$color-glass-surface-subtle};
+
+  --shadow-card: #{colors.$shadow-card};
+  --shadow-glass-item: #{colors.$shadow-glass-item};
+
+  --color-icon-primary: #{colors.$color-icon-primary};
+  --color-icon-secondary: #{colors.$color-icon-secondary};
+  --color-icon-success: #{colors.$color-icon-success};
+  --color-icon-button-primary: #{colors.$color-icon-button-primary};
+
+  --color-bg-primary: #{colors.$bg-primary};
+  --color-bg-secondary: #{colors.$bg-secondary};
+  --color-bg-card: #{colors.$bg-card};
+
+  --color-text-muted: #{colors.$text-muted};
+
+  --color-border-subtle: #{colors.$border-subtle};
+  --color-border-light: #{colors.$border-light};
+
+  --color-overlay-dark: #{colors.$overlay-dark};
+  --color-overlay-glass: #{colors.$overlay-glass};
+}

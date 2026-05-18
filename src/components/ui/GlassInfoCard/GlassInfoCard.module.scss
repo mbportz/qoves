@@ -1,0 +1,105 @@
+@use "@/styles/tokens" as *;
+@use "@/styles/mixins" as *;
+
+// Glass morphism info card — source: Components.md
+$glass-info-blur: 16px;
+$glass-info-surface: rgb(255 255 255 / 20%);
+$glass-info-surface-min-height: 230px;
+
+// > main container — Card Container
+.container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 100%;
+  padding: $space-4;
+}
+
+// > content — Frame 2147227114
+.surface {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  align-self: stretch;
+  gap: $space-6;
+  width: 100%;
+  min-height: auto;
+  padding: $space-4;
+  border-radius: 12px;
+  background: $glass-info-surface;
+  -webkit-backdrop-filter: blur($glass-info-blur);
+  backdrop-filter: blur($glass-info-blur);
+
+  @include up(md) {
+    flex: none;
+    min-height: $glass-info-surface-min-height;
+  }
+}
+
+.mediaRow {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  align-self: stretch;
+  gap: 10px;
+  width: 100%;
+  flex: none;
+}
+
+.imageWrap {
+  flex-shrink: 0;
+  width: 120px;
+  height: 81px;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  align-self: stretch;
+  gap: $space-2;
+  width: 100%;
+  flex: none;
+}
+
+.title {
+  margin: 0;
+  color: var(--color-text-button-primary);
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--color-text-button-primary);
+  opacity: 0.5;
+}
+
+.onVideo {
+  background: $glass-info-surface;
+}
+
+.default {
+  background: var(--color-glass-surface);
+
+  .title,
+  .subtitle {
+    color: var(--color-text-primary);
+  }
+
+  .subtitle {
+    opacity: 0.5;
+  }
+}

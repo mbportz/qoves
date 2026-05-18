@@ -1,0 +1,220 @@
+@use "@/styles/tokens" as *;
+@use "@/styles/mixins" as *;
+
+$faq-ease: cubic-bezier(0.22, 1, 0.36, 1);
+$faq-duration: 0.4s;
+
+.list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.category {
+  box-sizing: border-box;
+  padding: $space-2;
+  border-bottom: 0.75px solid var(--color-border-primary-muted);
+  transition:
+    background-color $faq-duration $faq-ease,
+    border-radius $faq-duration $faq-ease,
+    box-shadow $faq-duration $faq-ease;
+
+  &.categoryOpen {
+    border-bottom: none;
+    border-radius: 8px;
+    background: var(--color-primary-400);
+    box-shadow: 0 14px 17.5px 0 rgb(154 174 181 / 10%);
+  }
+}
+
+.categorySummary {
+  @include flex-between;
+  position: relative;
+  z-index: 2;
+  gap: $space-3;
+  width: 100%;
+  min-height: 56px;
+  padding: $space-4;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  color: var(--color-text-primary);
+  transition: color $faq-duration $faq-ease;
+
+  .categoryOpen & {
+    gap: $space-5;
+    color: var(--color-text-button-primary);
+  }
+}
+
+.categoryTitle {
+  margin: 0;
+}
+
+.reveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows $faq-duration $faq-ease;
+}
+
+.revealOpen {
+  grid-template-rows: 1fr;
+}
+
+.revealInner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.categoryPanel {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.3s $faq-ease 0.05s;
+}
+
+.reveal.revealOpen .categoryPanel {
+  opacity: 1;
+}
+
+.ambient {
+  position: absolute;
+  top: -90px;
+  left: calc(50% - 49px);
+  z-index: 0;
+  width: 444px;
+  height: 542px;
+  pointer-events: none;
+  transform: translateX(-50%) rotate(-90deg);
+}
+
+.ambientImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(150px);
+}
+
+.entriesWrap {
+  position: relative;
+  z-index: 1;
+  padding: 0 $space-2 $space-2;
+}
+
+.entriesGlass {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  padding: $space-2;
+  border-radius: 8px;
+  background: rgb(255 255 255 / 20%);
+  backdrop-filter: blur(50px);
+}
+
+.entry {
+  border-radius: 6px;
+  background: rgb(255 255 255 / 20%);
+  box-shadow: var(--shadow-glass-item);
+  backdrop-filter: blur(50px);
+
+  &:not(.entryOpen) {
+    border-bottom: 0.75px solid rgb(255 255 255 / 10%);
+  }
+}
+
+.entrySummary {
+  @include flex-between;
+  gap: $space-3;
+  width: 100%;
+  min-height: 48px;
+  padding: $space-3;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.entryQuestion {
+  margin: 0;
+  color: var(--color-text-button-primary);
+}
+
+.entryAnswer {
+  margin: 0;
+  padding: 0 $space-3 $space-3;
+  color: var(--color-text-button-primary);
+  opacity: 0.8;
+}
+
+.entryAnswerReveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s $faq-ease;
+
+  &.revealOpen {
+    grid-template-rows: 1fr;
+  }
+}
+
+.entryAnswerInner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.iconPair {
+  position: relative;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 16px;
+  height: 16px;
+  transition:
+    opacity 0.25s $faq-ease,
+    transform 0.25s $faq-ease;
+}
+
+.iconClosed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.iconOpen {
+  opacity: 0;
+  transform: scale(0.85);
+}
+
+.isOpen {
+  .iconClosed {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+
+  .iconOpen {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .category,
+  .categorySummary,
+  .reveal,
+  .categoryPanel,
+  .entryAnswerReveal,
+  .icon {
+    transition: none;
+  }
+
+  .categoryPanel {
+    opacity: 1;
+  }
+}

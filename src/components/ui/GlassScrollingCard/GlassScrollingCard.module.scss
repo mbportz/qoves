@@ -1,0 +1,104 @@
+@use "@/styles/tokens" as *;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: $space-4;
+  min-height: 400px;
+  padding: $space-4;
+  border-radius: 12px;
+}
+
+.header {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.title {
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.body {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}
+
+.item {
+  padding: $space-3;
+  border-radius: 6px;
+  background: var(--color-glass-surface-subtle);
+  color: var(--color-text-primary);
+  @include text-body-3-regular;
+}
+
+.onVideo {
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid rgb(255 255 255 / 32%);
+  background: transparent;
+  box-shadow:
+    0 18px 40px rgb(0 0 0 / 10%),
+    inset 0 1px 0 rgb(255 255 255 / 40%);
+
+  .lensLayer {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    background: rgb(255 255 255 / 18%);
+    -webkit-backdrop-filter: url(#scrolling-card-lens) blur(14px) brightness(1.14) contrast(1.02)
+      saturate(1.08);
+    backdrop-filter: url(#scrolling-card-lens) blur(14px) brightness(1.14) contrast(1.02) saturate(1.08);
+    transform: translateZ(0);
+  }
+
+  .lensRim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+    box-shadow:
+      inset 0 0 0 1px rgb(255 255 255 / 28%),
+      inset 0 0 32px rgb(255 255 255 / 12%);
+    pointer-events: none;
+  }
+
+  .content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: $space-4;
+    min-height: 400px;
+    padding: $space-4;
+  }
+
+  .title,
+  .item {
+    color: var(--color-text-button-primary);
+    text-shadow: 0 1px 10px rgb(0 0 0 / 28%);
+  }
+
+  .item {
+    background: rgb(255 255 255 / 14%);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .onVideo .lensLayer {
+    background: rgb(255 255 255 / 16%);
+    -webkit-backdrop-filter: url(#scrolling-card-lens) blur(12px) brightness(1.1) contrast(1.02)
+      saturate(1.06);
+    backdrop-filter: url(#scrolling-card-lens) blur(12px) brightness(1.1) contrast(1.02) saturate(1.06);
+  }
+}

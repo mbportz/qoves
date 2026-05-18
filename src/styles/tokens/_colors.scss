@@ -1,0 +1,49 @@
+// Figma tokens — source: Colors.md
+
+$color-bg-base: #ffffff;
+$color-bg-secondary-hover: #aec2c9;
+$color-primary-50: #f9fbfb;
+$color-primary-400: #9aaeb5;
+$color-primary-600: #5d767e;
+$color-gray-50: #f2f2f2;
+
+$color-text-primary: #233137;
+$color-text-secondary: #515255;
+$color-text-tertiary: #758084;
+$color-text-disabled: #9aaeb5;
+$color-text-button-primary: #ffffff;
+$color-text-button-secondary: #233137;
+$color-text-button-primary-disabled: #f2f2f2;
+
+$color-border-base: #e8e8e8;
+$color-border-primary-muted: #f2f2f2;
+$color-border-badge: #c7d1d54d;
+$color-border-card: #d7e5eb;
+$color-border-glass: #ffffff1a;
+
+$color-icon-primary: #233137;
+$color-icon-secondary: #758084;
+$color-icon-success: #0c6826;
+$color-icon-button-primary: #ffffff;
+
+$color-glass-surface: #ffffff33;
+$color-glass-surface-subtle: #ffffff1a;
+
+// Semantic aliases — use in components
+
+$bg-primary: $color-bg-base;
+$bg-secondary: $color-primary-50;
+$bg-card: $color-bg-base;
+
+$text-primary: $color-text-primary;
+$text-secondary: $color-text-secondary;
+$text-muted: $color-text-tertiary;
+
+$border-subtle: $color-border-primary-muted;
+$border-light: $color-border-base;
+
+$overlay-dark: rgb(35 49 55 / 60%);
+$overlay-glass: rgb(249 251 251 / 80%);
+
+$shadow-card: 0 14.25px 17.81px 0 rgb(0 0 0 / 5%);
+$shadow-glass-item: 0 16px 16px 0 #23313708;

@@ -1,0 +1,75 @@
+$icon-ease: cubic-bezier(0.22, 1, 0.36, 1);
+$icon-duration: 0.45s;
+
+.root {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+
+.svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+  transition: transform $icon-duration $icon-ease;
+}
+
+.barH,
+.barV {
+  fill: none;
+  transition:
+    stroke $icon-duration $icon-ease,
+    opacity $icon-duration $icon-ease,
+    transform $icon-duration $icon-ease;
+}
+
+.root[data-faq-icon="category"] {
+  .barH,
+  .barV {
+    stroke: #758084;
+  }
+}
+
+.root[data-faq-icon="entry"] {
+  .barH,
+  .barV {
+    stroke: #fff;
+    stroke-width: 1.33333;
+  }
+
+  .barV {
+    transform-origin: center;
+  }
+}
+
+:global([data-faq-category][open]) {
+  [data-faq-icon="category"] {
+    .svg {
+      transform: rotate(45deg);
+    }
+
+    .barH,
+    .barV {
+      stroke: #fff;
+    }
+  }
+}
+
+:global([data-faq-entry][open]) {
+  [data-faq-icon="entry"] {
+    .barV {
+      opacity: 0;
+      transform: scaleY(0);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .svg,
+  .barH,
+  .barV {
+    transition: none;
+  }
+}

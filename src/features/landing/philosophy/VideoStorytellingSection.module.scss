@@ -1,0 +1,502 @@
+@use "@/styles/tokens" as *;
+@use "@/styles/mixins" as *;
+
+$philosophy-max: 1360px;
+$philosophy-content-padding: 46px;
+$philosophy-stage-min: 957px;
+$philosophy-media-height: min(100svh, $philosophy-stage-min);
+$philosophy-frame-border: 1.15px solid rgb(242 242 242 / 20%);
+$philosophy-inner-border: 1px solid rgb(242 242 242 / 20%);
+$philosophy-tint-bottom: rgb(0 0 0 / 56%);
+$philosophy-tint-top: rgb(0 0 0 / 24%);
+$philosophy-vanity-tint: rgb(0 0 0 / 40%);
+$philosophy-vanity-card-min: 400px;
+$philosophy-vanity-cards-gap: $space-5;
+$philosophy-vanity-cards-cluster: calc(
+  #{$space-7} * 2 + #{$philosophy-vanity-card-min} * 2 + #{$philosophy-vanity-cards-gap}
+);
+// Extra cards-stage height so the last card can scroll up to the top inset
+$philosophy-vanity-last-card-runway: calc(
+  #{$philosophy-vanity-card-min} + #{$philosophy-vanity-cards-gap} + #{$space-7}
+);
+// Scroll span for questions + vanity (video unpins when this ends)
+$philosophy-scroll-span: calc(
+  #{$philosophy-stage-min} + #{$philosophy-media-height} + #{$philosophy-vanity-cards-cluster} +
+    #{$philosophy-vanity-last-card-runway}
+);
+
+@mixin philosophy-full-bleed {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  max-width: 100vw;
+  transform: translateX(-50%);
+}
+
+@mixin philosophy-stage-blur($amount) {
+  @include philosophy-full-bleed;
+
+  z-index: 0;
+  background: transparent;
+  pointer-events: none;
+  -webkit-backdrop-filter: blur($amount);
+  backdrop-filter: blur($amount);
+}
+
+.root {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  overflow: visible;
+  background: var(--color-bg-base);
+}
+
+.track {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+}
+
+.mediaPinZone {
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  pointer-events: none;
+
+  @include up(md) {
+    height: $philosophy-scroll-span;
+  }
+}
+
+.media {
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  height: $philosophy-media-height;
+  pointer-events: auto;
+
+  @include up(md) {
+    position: sticky;
+    top: 0;
+  }
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  overflow-x: clip;
+}
+
+.videoEl {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: max(100%, 1916px);
+  height: 1086px;
+  min-width: 100%;
+  min-height: 100%;
+  max-width: none;
+  object-fit: cover;
+  transform: translateX(-50%);
+}
+
+.filterBottom,
+.filterTop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+// Video tint only — no blur (blur lives on the content layer).
+.filterBottom {
+  background: linear-gradient(360deg, $philosophy-tint-bottom 0%, rgb(0 0 0 / 0%) 100%);
+}
+
+.filterTop {
+  background: linear-gradient(360deg, $philosophy-tint-top 0%, rgb(0 0 0 / 0%) 51.24%);
+  transform: scaleY(-1);
+}
+
+.content {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: $philosophy-scroll-span;
+
+  @include up(md) {
+    margin-top: calc(-1 * #{$philosophy-scroll-span});
+  }
+  padding-inline: $philosophy-content-padding;
+  pointer-events: none;
+}
+
+.questionsStage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: $philosophy-stage-min;
+  overflow: visible;
+}
+
+// Combined section: blur/tint span both panels; steeper ramp, stronger peak blur.
+$content-blur-offset: 14%;
+$content-blur-stop: 42%;
+$content-tint-full-start: 50%;
+$content-blur-max: 36px;
+$content-blur-amount: $content-blur-max;
+$content-handoff-tint: $philosophy-vanity-tint;
+
+@mixin philosophy-content-blur-mask {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent $content-blur-offset,
+    #000 $content-blur-stop,
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent $content-blur-offset,
+    #000 $content-blur-stop,
+    #000 100%
+  );
+}
+
+@mixin philosophy-content-tint-mask {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent $content-blur-offset,
+    #000 $content-tint-full-start,
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent $content-blur-offset,
+    #000 $content-tint-full-start,
+    #000 100%
+  );
+}
+
+.contentBlurGradient {
+  @include philosophy-stage-blur($content-blur-amount);
+  @include philosophy-content-blur-mask;
+}
+
+.contentTint {
+  @include philosophy-full-bleed;
+
+  z-index: 0;
+  background: $content-handoff-tint;
+  pointer-events: none;
+  @include philosophy-content-tint-mask;
+}
+
+.wrapper {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: $philosophy-max;
+  min-height: $philosophy-stage-min;
+  border-inline: $philosophy-inner-border;
+  @include full-bleed-horizontal-rule(top, $philosophy-inner-border);
+  border-bottom: none;
+  pointer-events: auto;
+}
+
+.glowUp {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  width: 100%;
+}
+
+.frame {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  min-height: 695px;
+  padding: $space-7;
+}
+
+.badge {
+  flex-shrink: 0;
+  border-color: var(--color-border-glass);
+  background: rgb(255 255 255 / 12%);
+  color: var(--color-text-button-primary);
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $space-4;
+  width: min(100%, 467px);
+  text-align: left;
+}
+
+.title,
+.description {
+  margin: 0;
+  color: var(--color-text-button-primary);
+}
+
+.cardsRow {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  @include full-bleed-horizontal-rule(top, $philosophy-inner-border);
+}
+
+.cardSlot {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+@include up(md) {
+  .cardsRow {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 0;
+    min-height: 262px;
+  }
+
+  .cardSlot {
+    min-height: 262px;
+
+    &:not(:last-child) {
+      border-inline-end: $philosophy-inner-border;
+    }
+  }
+}
+
+// Vanity block — hero pins like video; cards scroll over
+.vanityBlock {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: calc(
+    #{$philosophy-media-height} + #{$philosophy-vanity-cards-cluster} + #{$philosophy-vanity-last-card-runway}
+  );
+  overflow: visible;
+}
+
+.vanityWrapper {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  max-width: $philosophy-max;
+  min-height: calc(
+    #{$philosophy-media-height} + #{$philosophy-vanity-cards-cluster} + #{$philosophy-vanity-last-card-runway}
+  );
+  pointer-events: auto;
+}
+
+.vanityGlow {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  width: 100%;
+  min-height: calc(
+    #{$philosophy-media-height} + #{$philosophy-vanity-cards-cluster} + #{$philosophy-vanity-last-card-runway}
+  );
+  border-inline: $philosophy-inner-border;
+  @include full-bleed-horizontal-rule(both, $philosophy-inner-border);
+}
+
+.vanityHeroSticky {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: $philosophy-media-height;
+  pointer-events: none;
+
+  @media (min-width: 768px) {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+}
+
+.vanityHero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-4;
+  width: min(100%, 549px);
+  text-align: center;
+  pointer-events: auto;
+}
+
+.vanityCardsStage {
+  position: relative;
+  z-index: 4;
+  flex-shrink: 0;
+  width: 100%;
+  min-height: calc(#{$philosophy-vanity-cards-cluster} + #{$philosophy-vanity-last-card-runway});
+  pointer-events: none;
+}
+
+.vanityTitle,
+.vanityDescription {
+  margin: 0;
+  color: var(--color-text-button-primary);
+}
+
+.vanityTitle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  text-align: center;
+}
+
+.vanityTitleLine {
+  display: block;
+}
+
+.vanityTitleAccent {
+  display: block;
+  color: var(--color-text-disabled);
+}
+
+.vanityDescription {
+  max-width: 528px;
+  opacity: 0.7;
+}
+
+.vanityCardLeft,
+.vanityCardRight {
+  position: absolute;
+  z-index: 1;
+  width: min(100%, 443px);
+  min-height: $philosophy-vanity-card-min;
+  pointer-events: auto;
+
+  > article {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    min-height: 100%;
+  }
+}
+
+.vanityCardLeft {
+  top: $space-7;
+  left: $space-7;
+}
+
+.vanityCardRight {
+  top: calc(#{$space-7} + #{$philosophy-vanity-card-min} + #{$philosophy-vanity-cards-gap});
+  right: $space-7;
+  z-index: 2;
+}
+
+.vanityPinEnd {
+  width: 100%;
+  height: 0;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+@include down(md) {
+  .mediaPinZone {
+    height: auto;
+  }
+
+  .media {
+    position: relative;
+  }
+
+  .content {
+    margin-top: 0;
+    min-height: auto;
+    padding-inline: $space-4;
+  }
+
+  .frame {
+    min-height: 420px;
+    padding: $space-5;
+  }
+
+  .wrapper {
+    min-height: 720px;
+  }
+
+  .vanityBlock {
+    min-height: auto;
+  }
+
+  .vanityWrapper {
+    min-height: auto;
+  }
+
+  .vanityGlow {
+    min-height: auto;
+  }
+
+  .vanityHeroSticky {
+    position: relative;
+    min-height: auto;
+    padding-block: $space-7;
+  }
+
+  .vanityCardsStage {
+    min-height: auto;
+    padding-block: $space-5;
+    display: flex;
+    flex-direction: column;
+    gap: $space-5;
+  }
+
+  .vanityCardLeft,
+  .vanityCardRight {
+    position: relative;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    width: 100%;
+    min-height: 320px;
+  }
+
+  .vanityHero {
+    margin-bottom: $space-4;
+  }
+}

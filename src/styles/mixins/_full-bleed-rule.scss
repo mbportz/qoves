@@ -1,0 +1,33 @@
+/// Single horizontal rule spanning the viewport width.
+/// Use on `position: relative` hosts; keep vertical borders on the host via border-inline.
+@mixin full-bleed-horizontal-rule($edge: top, $line: 1px solid var(--color-border-primary-muted)) {
+  @if $edge == top or $edge == both {
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      z-index: 1;
+      width: 100vw;
+      max-width: 100vw;
+      transform: translateX(-50%);
+      border-top: $line;
+      pointer-events: none;
+    }
+  }
+
+  @if $edge == bottom or $edge == both {
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      z-index: 1;
+      width: 100vw;
+      max-width: 100vw;
+      transform: translateX(-50%);
+      border-top: $line;
+      pointer-events: none;
+    }
+  }
+}

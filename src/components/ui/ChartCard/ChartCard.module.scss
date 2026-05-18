@@ -1,0 +1,28 @@
+@use "@/styles/tokens" as *;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}
+
+.title {
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.description {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.chart {
+  width: 100%;
+  min-height: 200px;
+}
