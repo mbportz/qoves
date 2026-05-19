@@ -8,6 +8,7 @@ $analysis-header-min-height: 214px;
 $analysis-card-height: 530px;
 
 $analysis-border: 1px solid var(--color-border-glass);
+$analysis-radial-tint: rgb(35 49 55 / 14%);
 
 // Mobile overrides (768px and below) — see .cursor/rules/facial-analysis-layout.mdc
 $analysis-card-gap-sm: -20px;
@@ -29,6 +30,17 @@ $analysis-card-gap-narrow: -16px;
   inset: 0;
   z-index: 0;
   pointer-events: none;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      ellipse 72% 50% at 50% 56%,
+      $analysis-radial-tint 0%,
+      transparent 72%
+    );
+  }
 }
 
 .ambientImage {
@@ -87,6 +99,8 @@ $analysis-card-gap-narrow: -16px;
 }
 
 .label {
+  // Accent default (--color-text-disabled) matches primary-400 bg; use muted white instead.
+  --section-label-title-accent-color: rgb(255 255 255 / 0.62);
   width: 100%;
   gap: $space-4;
 
