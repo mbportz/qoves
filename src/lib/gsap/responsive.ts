@@ -1,14 +1,17 @@
 import { prefersReducedMotion } from "./reducedMotion";
 
-const MOBILE_MAX_WIDTH = 767.98;
-const TABLET_MAX_WIDTH = 1023.98;
+/** Same as `$breakpoint-sm` / `down(sm)` */
+export const BREAKPOINT_SM_PX = 768;
+
+export const mediaMobile = `(max-width: ${BREAKPOINT_SM_PX}px)`;
+export const mediaDesktop = `(min-width: ${BREAKPOINT_SM_PX + 1}px)`;
 
 export function isMobileViewport() {
   if (typeof window === "undefined") {
     return false;
   }
 
-  return window.matchMedia(`(max-width: ${MOBILE_MAX_WIDTH}px)`).matches;
+  return window.matchMedia(mediaMobile).matches;
 }
 
 export function isTabletViewport() {
@@ -16,7 +19,7 @@ export function isTabletViewport() {
     return false;
   }
 
-  return window.matchMedia(`(max-width: ${TABLET_MAX_WIDTH}px)`).matches;
+  return window.matchMedia("(max-width: 1023px)").matches;
 }
 
 export function shouldSimplifyMotion() {

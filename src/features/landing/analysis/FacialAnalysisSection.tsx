@@ -1,7 +1,8 @@
 "use client";
 
 import beforeAmbient from "@/assets/Before.png";
-import facialAnalysisImage from "@/assets/Facial_analysis.png";
+import facialAnalysisDesktop from "@/assets/Facial_analysis.png";
+import facialAnalysisMobile from "@/assets/Facial_analysys_half_body.png";
 import Image from "next/image";
 import { SectionLabel } from "@/components/ui/SectionLabel/SectionLabel";
 import { useSectionAnimation } from "@/lib/gsap";
@@ -11,7 +12,7 @@ import { createAnalysisAnimation } from "./analysis.animation";
 import styles from "./FacialAnalysisSection.module.scss";
 
 export function FacialAnalysisSection() {
-  const scopeRef = useSectionAnimation(createAnalysisAnimation);
+  const scopeRef = useSectionAnimation((scope) => createAnalysisAnimation(scope));
 
   return (
     <section ref={scopeRef} id="analysis" className={styles.root}>
@@ -40,7 +41,10 @@ export function FacialAnalysisSection() {
           </div>
 
           <div className={styles.cardContainer}>
-            <AnalysisDashboard image={facialAnalysisImage} />
+            <AnalysisDashboard
+              desktopImage={facialAnalysisDesktop}
+              mobileImage={facialAnalysisMobile}
+            />
           </div>
         </div>
       </div>

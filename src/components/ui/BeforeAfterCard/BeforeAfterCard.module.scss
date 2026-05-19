@@ -60,8 +60,8 @@ $hero-feature-padding: 18.994px;
   z-index: 1;
   transform: translateX(-50%);
   color: var(--color-text-button-primary);
-  font-size: 16.15px;
-  line-height: 19px;
+  font-size: clamp(0.625rem, 1.4vw, 0.8125rem);
+  line-height: 1.2;
   text-transform: uppercase;
   pointer-events: none;
 }

@@ -22,13 +22,6 @@ export type DashboardChartConfig = {
 
 export const chartsClusterCharts: DashboardChartConfig[] = [
   {
-    area: "scatterChart",
-    src: scatterplotChartImage,
-    width: 286,
-    height: 338,
-    sizes: "(max-width: 768px) 28vw, 273px",
-  },
-  {
     area: "bellCurve",
     src: bellCurveChartImage,
     width: 286,
@@ -42,21 +35,28 @@ export const chartsClusterCharts: DashboardChartConfig[] = [
     height: 127,
     sizes: "(max-width: 768px) 22vw, 284px",
   },
+  {
+    area: "scatterChart",
+    src: scatterplotChartImage,
+    width: 286,
+    height: 338,
+    sizes: "(max-width: 768px) 28vw, 273px",
+  },
 ];
 
 export const metricsClusterCharts: DashboardChartConfig[] = [
-  {
-    area: "feature",
-    src: featureContainerImage,
-    width: 353,
-    height: 166,
-    sizes: "(max-width: 768px) 26vw, 352px",
-  },
   {
     area: "container",
     src: containerImage,
     width: 286,
     height: 157,
     sizes: "(max-width: 768px) 22vw, 285px",
+  },
+  {
+    area: "feature",
+    src: featureContainerImage,
+    width: 353,
+    height: 166,
+    sizes: "(max-width: 768px) 26vw, 352px",
   },
 ];

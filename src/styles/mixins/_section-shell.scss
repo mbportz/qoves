@@ -1,0 +1,11 @@
+@use '../tokens/spacing' as *;
+
+/// Horizontal padding for bordered section shells (hero, analysis, FAQ, etc.)
+@mixin section-inline-padding {
+  padding-inline: clamp(#{$space-4}, 4.5vw, 40px);
+}
+
+/// Section header block top spacing
+@mixin section-header-padding-block {
+  padding-block: clamp(#{$space-6}, 6vw, 56px) 0;
+}

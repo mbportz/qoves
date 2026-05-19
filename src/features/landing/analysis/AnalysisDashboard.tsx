@@ -10,7 +10,8 @@ import {
 import styles from "./AnalysisDashboard.module.scss";
 
 type AnalysisDashboardProps = {
-  image: StaticImageData;
+  desktopImage: StaticImageData;
+  mobileImage: StaticImageData;
 };
 
 type GridCellProps = {
@@ -26,25 +27,32 @@ function GridCell({ area, children }: GridCellProps) {
   );
 }
 
-export function AnalysisDashboard({ image }: AnalysisDashboardProps) {
+export function AnalysisDashboard({
+  desktopImage,
+  mobileImage,
+}: AnalysisDashboardProps) {
   return (
     <div className={styles.cardContent}>
       <div className={styles.root} data-analysis-dashboard>
-        <div className={styles.stage} data-section-content>
+        <div className={styles.stage} data-section-content data-section-item>
           <div className={styles.blurLeft} aria-hidden />
           <div className={styles.blurRight} aria-hidden />
           <div className={styles.canvas}>
-            <div
-              className={styles.visualTrack}
-              data-analysis-layer
-              data-section-item
-            >
+            <div className={styles.visualTrack} data-analysis-layer>
               <div className={styles.visualFrame}>
                 <Image
-                  className={styles.visual}
-                  src={image}
+                  className={`${styles.visual} ${styles.visualDesktop}`}
+                  src={desktopImage}
                   alt="Qoves facial analysis dashboard with charts and feature scores"
-                  sizes="(max-width: 768px) 100vw, 1360px"
+                  sizes="(min-width: 769px) 1360px, 0px"
+                  fill
+                  priority={false}
+                />
+                <Image
+                  className={`${styles.visual} ${styles.visualMobile}`}
+                  src={mobileImage}
+                  alt="Qoves facial analysis dashboard with charts and feature scores"
+                  sizes="(max-width: 768px) 100vw, 0px"
                   fill
                   priority={false}
                 />

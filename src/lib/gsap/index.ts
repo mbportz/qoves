@@ -7,6 +7,9 @@ export type {
 } from "./motion";
 export { prefersReducedMotion } from "./reducedMotion";
 export {
+  BREAKPOINT_SM_PX,
+  mediaDesktop,
+  mediaMobile,
   isMobileViewport,
   isTabletViewport,
   shouldSimplifyMotion,
@@ -37,3 +40,4 @@ export {
 export { createMotionTimeline, overlapPosition } from "./timeline";
 export type { SectionAnimationFactory, SectionAnimationResult } from "./types";
 export { useSectionAnimation } from "./useSectionAnimation";
+export { useMobileViewport } from "./useMobileViewport";

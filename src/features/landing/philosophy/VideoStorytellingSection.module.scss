@@ -136,7 +136,7 @@ $philosophy-scroll-span: calc(
   @include up(md) {
     margin-top: calc(-1 * #{$philosophy-scroll-span});
   }
-  padding-inline: $philosophy-content-padding;
+  padding-inline: clamp(#{$space-4}, 4.5vw, #{$philosophy-content-padding});
   pointer-events: none;
 }
 
@@ -250,6 +250,7 @@ $content-handoff-tint: $philosophy-vanity-tint;
   align-items: flex-start;
   gap: $space-4;
   width: min(100%, 467px);
+  max-width: 100%;
   text-align: left;
 }
 
@@ -442,21 +443,33 @@ $content-handoff-tint: $philosophy-vanity-tint;
 
   .media {
     position: relative;
+    height: min(72svh, 640px);
+  }
+
+  .videoEl {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   .content {
     margin-top: 0;
     min-height: auto;
-    padding-inline: $space-4;
+  }
+
+  .questionsStage {
+    min-height: auto;
   }
 
   .frame {
-    min-height: 420px;
-    padding: $space-5;
+    min-height: min(420px, 70svh);
+    padding: clamp(#{$space-4}, 4vw, #{$space-5});
   }
 
   .wrapper {
-    min-height: 720px;
+    min-height: auto;
   }
 
   .vanityBlock {
@@ -497,6 +510,13 @@ $content-handoff-tint: $philosophy-vanity-tint;
   }
 
   .vanityHero {
+    width: 100%;
+    max-width: min(549px, 100%);
     margin-bottom: $space-4;
+    padding-inline: $space-2;
+  }
+
+  .vanityDescription {
+    max-width: min(528px, 100%);
   }
 }

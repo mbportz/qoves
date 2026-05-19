@@ -1,15 +1,23 @@
 @use 'sass:map';
 @use '../tokens/breakpoints' as *;
 
-@mixin up($name) {
-  $min: map.get($breakpoints, $name);
+@function breakpoint-min($name) {
+  $value: map.get($breakpoints, $name);
 
-  @if $min {
-    @media (min-width: $min) {
-      @content;
-    }
-  } @else {
+  @if $value == null {
     @error 'Breakpoint "#{$name}" is not defined.';
+  }
+
+  @if $name == sm {
+    @return $value + 1px;
+  }
+
+  @return $value;
+}
+
+@mixin up($name) {
+  @media (min-width: breakpoint-min($name)) {
+    @content;
   }
 }
 
@@ -17,7 +25,7 @@
   $max: map.get($breakpoints, $name);
 
   @if $max {
-    @media (max-width: calc(#{$max} - 0.02px)) {
+    @media (max-width: #{$max}) {
       @content;
     }
   } @else {
@@ -26,11 +34,10 @@
 }
 
 @mixin between($from, $to) {
-  $min: map.get($breakpoints, $from);
   $max: map.get($breakpoints, $to);
 
-  @if $min and $max {
-    @media (min-width: $min) and (max-width: calc(#{$max} - 0.02px)) {
+  @if $max {
+    @media (min-width: breakpoint-min($from)) and (max-width: #{$max}) {
       @content;
     }
   } @else {

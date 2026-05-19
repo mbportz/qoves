@@ -1,19 +1,35 @@
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   addSectionHeaderReveal,
   addSectionItemsReveal,
   bindCardHoverLift,
-  bindParallaxLayers,
   createMotionTimeline,
   getScrollTriggerConfig,
-  isMobileViewport,
   killScopeScrollTriggers,
+  mediaDesktop,
+  mediaMobile,
   motion,
+  sectionSelectors,
 } from "@/lib/gsap";
 
-export function createAnalysisAnimation(scope: HTMLElement) {
+function clearAnalysisMotionStyles(scope: HTMLElement) {
   const q = gsap.utils.selector(scope);
-  const mobile = isMobileViewport();
+  const items = q(sectionSelectors.item);
+  const layers = q("[data-analysis-layer]");
+
+  if (items.length) {
+    gsap.set(items, { clearProps: "transform,opacity" });
+  }
+
+  // Layout uses CSS transform on this layer — only clear GSAP opacity.
+  if (layers.length) {
+    gsap.set(layers, { clearProps: "opacity" });
+  }
+}
+
+function setupAnalysisMotion(scope: HTMLElement, desktop: boolean) {
+  const q = gsap.utils.selector(scope);
 
   const tl = createMotionTimeline({
     scrollTrigger: getScrollTriggerConfig(scope, "reveal"),
@@ -27,15 +43,15 @@ export function createAnalysisAnimation(scope: HTMLElement) {
     subtitleOverlap: "loose",
   });
 
-  const layers = q("[data-analysis-layer]");
-
   addSectionItemsReveal(tl, q, {
-    preset: mobile ? "fadeUpMd" : "fadeUpXl",
+    preset: desktop ? "fadeUpXl" : "fadeUpMd",
     stagger: "tight",
     overlap: "base",
   });
 
-  if (!mobile && layers.length) {
+  const layers = q("[data-analysis-layer]");
+
+  if (desktop && layers.length) {
     tl.from(
       layers,
       {
@@ -48,17 +64,28 @@ export function createAnalysisAnimation(scope: HTMLElement) {
     );
   }
 
-  const cleanupHover = bindCardHoverLift(layers);
-  const cleanupParallax = bindParallaxLayers(
-    scope,
-    layers,
-    mobile ? [0.2] : [0.35],
-  );
+  const cleanupHover = desktop ? bindCardHoverLift(layers) : () => undefined;
+
+  requestAnimationFrame(() => ScrollTrigger.refresh());
 
   return () => {
     tl.kill();
     killScopeScrollTriggers(scope);
     cleanupHover();
-    cleanupParallax();
+    clearAnalysisMotionStyles(scope);
+    requestAnimationFrame(() => ScrollTrigger.refresh());
+  };
+}
+
+export function createAnalysisAnimation(scope: HTMLElement) {
+  const mm = gsap.matchMedia();
+
+  mm.add(mediaMobile, () => setupAnalysisMotion(scope, false));
+  mm.add(mediaDesktop, () => setupAnalysisMotion(scope, true));
+
+  return () => {
+    mm.revert();
+    clearAnalysisMotionStyles(scope);
+    requestAnimationFrame(() => ScrollTrigger.refresh());
   };
 }

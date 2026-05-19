@@ -1,22 +1,24 @@
-import { Navbar, SectionSpacer } from "@/components/layout";
+import { SectionSpacer } from "@/components/layout";
+import { Footer } from "@/components/layout/Footer";
 import { FacialAnalysisSection } from "./analysis/FacialAnalysisSection";
 import { FaqSection } from "./faq/FaqSection";
 import { HeroSection } from "./hero/HeroSection";
+import styles from "./LandingPage.module.scss";
 import { VideoStorytellingSection } from "./philosophy/VideoStorytellingSection";
-import { Footer } from "@/components/layout/Footer";
 
 export function LandingPage() {
   return (
-    <>
-      <Navbar />
-      <HeroSection />
-      <SectionSpacer />
+    <div className={styles.page}>
+      <div className={styles.heroBlock}>
+        <HeroSection />
+        <SectionSpacer />
+      </div>
       <FacialAnalysisSection />
       <SectionSpacer />
       <FaqSection />
       <SectionSpacer />
       <VideoStorytellingSection />
       <Footer />
-    </>
+    </div>
   );
 }

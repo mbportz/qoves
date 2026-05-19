@@ -6,7 +6,7 @@
   align-items: center;
   align-self: stretch;
   width: 100%;
-  padding-inline: var(--section-spacer-padding-inline, 40px);
+  padding-inline: var(--section-spacer-padding-inline, clamp(1rem, 4.5vw, 2.5rem));
   gap: 10px;
 }
 
@@ -14,9 +14,9 @@
   box-sizing: border-box;
   width: 100%;
   max-width: var(--section-spacer-max-width, 1360px);
-  height: var(--section-spacer-height, 120px);
+  height: var(--section-spacer-height, clamp(64px, 12vw, 120px));
   margin-inline: auto;
-  padding-block: var(--section-spacer-padding-inline, 40px);
+  padding-block: var(--section-spacer-padding-inline, clamp(1rem, 4.5vw, 2.5rem));
 }
 
 .innerBordered {

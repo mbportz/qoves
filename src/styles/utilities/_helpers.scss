@@ -1,4 +1,5 @@
 @use '../tokens/spacing' as *;
+@use '../tokens/breakpoints' as *;
 @use '../tokens/typography' as type;
 @use '../mixins/media' as *;
 
@@ -40,62 +41,129 @@
 .heading-3 {
   @include type.text-heading-3-book;
 
+  @include down(md) {
+    font-size: clamp(2rem, 4.8vw, 2.5rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
   @include down(sm) {
-    font-size: 40px;
-    line-height: 48px;
+    font-size: clamp(1.75rem, 8.5vw, 2.25rem);
+    line-height: 1.2;
   }
 }
 
 .heading-4 {
   @include type.text-heading-4-book;
 
+  @include down(md) {
+    font-size: clamp(2rem, 4.5vw, 2.5rem);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+  }
+
   @include down(sm) {
-    font-size: 32px;
-    line-height: 40px;
-    letter-spacing: -0.01em;
+    font-size: clamp(1.75rem, 8vw, 2rem);
+    line-height: 1.25;
   }
 }
 
 .heading-5 {
   @include type.text-heading-5-book;
 
+  @include down(md) {
+    font-size: clamp(1.75rem, 4vw, 2.25rem);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+  }
+
   @include down(sm) {
-    font-size: 28px;
-    line-height: 34px;
+    font-size: clamp(1.5rem, 7vw, 1.75rem);
+    line-height: 1.25;
   }
 }
 
 .heading-6 {
   @include type.text-heading-6-regular;
+
+  @include down(sm) {
+    font-size: clamp(1.375rem, 5.5vw, 1.75rem);
+    line-height: 1.25;
+  }
 }
 
 .heading-7 {
   @include type.text-heading-7-regular;
+
+  @include down(sm) {
+    font-size: clamp(1.125rem, 4.5vw, 1.375rem);
+    line-height: 1.3;
+  }
 }
 
 .heading-8,
 .heading-8-medium {
   @include type.text-heading-8-medium;
+
+  @include down(sm) {
+    font-size: clamp(1rem, 3.8vw, 1.125rem);
+    line-height: 1.3;
+  }
 }
 
 .heading-8-book {
   @include type.text-heading-8-book;
+
+  @include down(sm) {
+    font-size: clamp(1rem, 3.8vw, 1.125rem);
+    line-height: 1.3;
+  }
 }
 
 .body-2 {
   @include type.text-body-2-book;
+
+  @include down(md) {
+    font-size: clamp(0.875rem, 2.35vw, 1rem);
+    line-height: 1.5;
+  }
+
+  @include down(sm) {
+    font-size: clamp(0.8125rem, 3.5vw, 0.875rem);
+    line-height: 1.43;
+  }
 }
 
 .body-2-medium {
   @include type.text-body-2-medium;
+
+  @include down(md) {
+    font-size: clamp(0.875rem, 2.35vw, 1rem);
+    line-height: 1.5;
+  }
+
+  @include down(sm) {
+    font-size: clamp(0.8125rem, 3.5vw, 0.875rem);
+    line-height: 1.43;
+  }
 }
 
 .body-3 {
   @include type.text-body-3-book;
+
+  @include down(sm) {
+    font-size: clamp(0.8125rem, 3.2vw, 0.875rem);
+    line-height: 1.43;
+  }
 }
 
 .body-3-regular {
   @include type.text-body-3-regular;
+
+  @include down(sm) {
+    font-size: clamp(0.8125rem, 3.2vw, 0.875rem);
+    line-height: 1.43;
+  }
 }
 
 .body-4 {
@@ -104,10 +172,20 @@
 
 .body-4-zagma {
   @include type.text-body-4-zagma;
+
+  @include down(sm) {
+    font-size: clamp(0.625rem, 2.8vw, 0.75rem);
+    line-height: 1.167;
+  }
 }
 
 .body-4-zagma-lg {
   @include type.text-body-4-zagma-lg;
+
+  @include down(sm) {
+    font-size: clamp(0.75rem, 3.2vw, 0.875rem);
+    line-height: 1.2;
+  }
 }
 
 .body-5 {

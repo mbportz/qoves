@@ -9,6 +9,10 @@ $analysis-card-height: 530px;
 
 $analysis-border: 1px solid var(--color-border-glass);
 
+// Mobile overrides (768px and below) — see .cursor/rules/facial-analysis-layout.mdc
+$analysis-card-gap-sm: -20px;
+$analysis-card-gap-narrow: -16px;
+
 .root {
   position: relative;
   isolation: isolate;
@@ -38,7 +42,7 @@ $analysis-border: 1px solid var(--color-border-glass);
   object-fit: cover;
   filter: blur(250px);
 
-  @include down(md) {
+  @include down(sm) {
     width: min(520px, 95vw);
     height: auto;
     aspect-ratio: 438 / 474;
@@ -54,7 +58,7 @@ $analysis-border: 1px solid var(--color-border-glass);
   align-items: stretch;
   width: 100%;
   min-height: $analysis-section-min-height;
-  padding-inline: $analysis-content-padding;
+  padding-inline: clamp(#{$space-4}, 4.5vw, #{$analysis-content-padding});
   gap: 10px;
 }
 
@@ -78,7 +82,7 @@ $analysis-border: 1px solid var(--color-border-glass);
   align-items: center;
   width: 100%;
   min-height: $analysis-header-min-height;
-  padding: 56px 0 0;
+  padding: clamp(#{$space-6}, 6vw, 56px) 0 0;
   gap: $space-6;
 }
 
@@ -93,16 +97,20 @@ $analysis-border: 1px solid var(--color-border-glass);
   }
 
   :global(.heading-4) {
-    max-width: 556px;
+    max-width: min(556px, 100%);
     margin-inline: auto;
     color: var(--color-text-button-primary);
   }
 
   :global(.body-2) {
-    max-width: 490px;
+    max-width: min(490px, 100%);
     margin-inline: auto;
     color: var(--color-text-button-primary);
     opacity: 0.7;
+  }
+
+  @include down(sm) {
+    gap: $space-3;
   }
 }
 
@@ -115,19 +123,57 @@ $analysis-border: 1px solid var(--color-border-glass);
   min-height: $analysis-card-height;
 }
 
-@include down(md) {
-  .root,
-  .content,
-  .frame {
-    min-height: auto;
+// ---------------------------------------------------------------------------
+// Facial analysis section — mobile only (max-width: 768px)
+// ---------------------------------------------------------------------------
+@include down(sm) {
+  .root {
+    overflow: hidden;
+    padding-bottom: 0;
+    margin-bottom: 0;
   }
 
   .glowUp {
-    min-height: auto;
-    padding-top: $space-7;
+    position: relative;
+    z-index: 1;
+    padding: $space-7 clamp(#{$space-4}, 4.5vw, #{$analysis-content-padding}) 0;
+  }
+
+  .content {
+    gap: 0;
+    padding-inline: 0;
+    padding-bottom: 0;
+  }
+
+  .frame {
+    container-type: inline-size;
+    container-name: analysis-section;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    overflow: hidden;
   }
 
   .cardContainer {
-    min-height: 360px;
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    min-height: $analysis-card-height;
+    margin-top: $analysis-card-gap-sm;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    overflow: visible;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Facial analysis section — narrow mobile only (max-width: 375px)
+// ---------------------------------------------------------------------------
+@include down(xxs) {
+  .glowUp {
+    padding-top: $space-6;
+  }
+
+  .cardContainer {
+    margin-top: $analysis-card-gap-narrow;
   }
 }

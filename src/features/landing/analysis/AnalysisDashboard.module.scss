@@ -9,11 +9,64 @@ $analysis-composition-width: 1360;
 $analysis-composition-height: 1097;
 $analysis-overlay-top: 127;
 $analysis-overlay-height: 337;
+
+// Desktop (`up(sm)`) — see .cursor/rules/facial-analysis-layout.mdc
 $analysis-portrait-height: 120%;
+
+// Mobile (`down(sm)`)
+$analysis-portrait-frame-height-sm: $analysis-card-height;
+$analysis-portrait-scale-sm-max: 3.35;
+$analysis-portrait-scale-sm-ref: 768px;
+$analysis-portrait-scale-sm-base: 0.58;
+$analysis-portrait-scale-sm-shrink: 0.32;
+$analysis-portrait-scale-sm: min(
+  #{$analysis-portrait-scale-sm-max},
+  calc(
+    #{$analysis-portrait-scale-sm-max} *
+      (
+        #{$analysis-portrait-scale-sm-base} + #{$analysis-portrait-scale-sm-shrink} *
+          (100cqw / #{$analysis-portrait-scale-sm-ref})
+      )
+  )
+);
+$analysis-portrait-offset-y-sm: 42%;
+$analysis-portrait-z-index-sm: 10;
+$analysis-charts-z-index-sm: 1;
+$analysis-charts-scale-sm: 1.18;
+$analysis-overlay-top-mobile: 30%;
+$analysis-overlay-offset-y-sm: -10%;
+// Middle gap at full composition width; scales with --analysis-comp-scale on shrink.
+$analysis-overlay-cluster-gap-sm: 360px;
+$analysis-mobile-chart-width: 192px;
+
+// 0 = shrink with layout track; 1 = ignore track shrink. Charts: full (1). Portrait: partial (0.5).
+$analysis-charts-comp-compensate: 1;
+$analysis-portrait-comp-compensate: 0.5;
+
+// Narrow mobile (375px and below) — small deltas on top of mobile (768px) rules.
+$analysis-portrait-scale-narrow-factor: 1.05;
+$analysis-portrait-offset-y-narrow: 22%;
+$analysis-charts-scale-narrow-factor: 0.82;
+$analysis-overlay-top-narrow: -32%;
+$analysis-overlay-offset-y-narrow: -108%;
+$analysis-overlay-cluster-gap-narrow: 160px;
+$analysis-mobile-chart-width-narrow: 156px;
+
 $analysis-edge-blur-max: 4px;
 $analysis-edge-blur-fade-stop: 40%;
 $analysis-grid-gap: $space-3;
 $analysis-cluster-gap: clamp(192px, 21vw, 336px);
+$analysis-composition-width-px: #{$analysis-composition-width}px;
+$analysis-composition-height-px: #{$analysis-composition-height}px;
+$analysis-composition-scale-sm: min(1, calc(100cqw / #{$analysis-composition-width}px));
+$analysis-charts-comp-scale-divisor: calc(
+  (1 - #{$analysis-charts-comp-compensate}) + var(--analysis-comp-scale, 1) *
+    #{$analysis-charts-comp-compensate}
+);
+$analysis-portrait-comp-scale-divisor: calc(
+  (1 - #{$analysis-portrait-comp-compensate}) + var(--analysis-comp-scale, 1) *
+    #{$analysis-portrait-comp-compensate}
+);
 $scatter-chart-width: 286;
 $scatter-chart-height: 338;
 $scatter-bar-width: 282;
@@ -43,18 +96,25 @@ $container-height: 157;
   max-width: $analysis-card-content-max;
   min-height: $analysis-card-height;
   margin-inline: auto;
-  padding-inline: $analysis-content-padding;
+  padding-inline: clamp(#{$space-3}, 4.5vw, #{$analysis-content-padding});
   gap: 10px;
   isolation: isolate;
 
-  @include up(md) {
+  container-type: inline-size;
+  container-name: analysis-dashboard;
+
+  @include up(sm) {
     overflow: visible;
   }
 
-  @include down(md) {
+  @include down(sm) {
     flex: none;
-    min-height: 360px;
-    padding-inline: $space-4;
+    gap: 0;
+    height: $analysis-card-height;
+    min-height: $analysis-card-height;
+    padding-inline: 0;
+    padding-bottom: 0;
+    overflow: visible;
   }
 }
 
@@ -77,9 +137,11 @@ $container-height: 157;
   margin-inline: auto;
   overflow: hidden;
 
-  @include up(md) {
+  @include up(sm) {
     min-height: $analysis-card-height;
     overflow: visible;
+    align-items: flex-end;
+    justify-content: center;
   }
 }
 
@@ -114,7 +176,23 @@ $container-height: 157;
 
 .visual {
   object-fit: contain;
+}
+
+.visualDesktop {
   object-position: bottom center;
+
+  @include down(sm) {
+    display: none;
+  }
+}
+
+.visualMobile {
+  display: none;
+  object-position: bottom center;
+
+  @include down(sm) {
+    display: block;
+  }
 }
 
 .overlayGrid {
@@ -157,8 +235,8 @@ $container-height: 157;
   overflow: visible;
   grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
   grid-template-areas:
-    "scatterBar feature"
-    "scatterBar container";
+    "scatterBar container"
+    "scatterBar feature";
 }
 
 .gridCell {
@@ -186,14 +264,12 @@ $container-height: 157;
 
   &[data-grid-area="scatterBar"] {
     @include sized-chart-cell($scatter-bar-width, $scatter-bar-height);
-    z-index: 2;
     grid-area: scatterBar;
     pointer-events: auto;
   }
 
   &[data-grid-area="feature"] {
     @include sized-chart-cell($feature-width, $feature-height);
-    z-index: 1;
     grid-area: feature;
     overflow: visible;
   }
@@ -300,50 +376,163 @@ $container-height: 157;
   @include analysis-edge-blur-mask(right);
 }
 
-@include down(md) {
+// ---------------------------------------------------------------------------
+// Facial analysis dashboard — mobile only (max-width: 768px)
+// ---------------------------------------------------------------------------
+@include down(sm) {
+  .visualTrack {
+    --analysis-comp-scale: #{$analysis-composition-scale-sm};
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    flex-shrink: 0;
+    width: $analysis-composition-width-px;
+    max-width: none;
+    height: $analysis-composition-height-px;
+    margin-inline: 0;
+    aspect-ratio: auto;
+    overflow: visible;
+    transform: translateX(-50%) scale(var(--analysis-comp-scale));
+    transform-origin: bottom center;
+  }
+
+  .overlayGrid {
+    top: $analysis-overlay-top-mobile;
+    left: 50%;
+    z-index: $analysis-charts-z-index-sm;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100cqw;
+    max-width: 100cqw;
+    height: auto;
+    box-sizing: content-box;
+    padding-inline: $space-3;
+    gap: calc(#{$analysis-overlay-cluster-gap-sm} * var(--analysis-comp-scale, 1));
+    transform: translate(-50%, calc(-50% + #{$analysis-overlay-offset-y-sm}))
+      scale(calc(#{$analysis-charts-scale-sm} / #{$analysis-charts-comp-scale-divisor}));
+    transform-origin: center center;
+  }
+
   .blurLeft,
   .blurRight {
     display: none;
   }
 
-  .canvas {
-    position: relative;
-    inset: auto;
-    align-items: center;
-    min-height: 280px;
-  }
-
-  .visualTrack {
+  .root {
     width: 100%;
-    max-width: 100%;
-    aspect-ratio: 732 / 1097;
+    height: 100%;
+    min-height: 0;
   }
 
-  .visualFrame {
-    height: $analysis-portrait-height;
+  .stage {
+    height: $analysis-card-height;
+    min-height: $analysis-card-height;
+    padding-bottom: 0;
+    overflow: visible;
   }
 
-  .overlayGrid {
-    top: calc(#{$analysis-overlay-top} / #{$analysis-composition-height} * 100%);
-    flex-direction: column;
-    align-items: center;
-    width: max-content;
-    max-width: 100%;
-    height: auto;
-    max-height: none;
-    gap: $analysis-cluster-gap;
-    transform: translateX(-50%);
+  .canvas {
+    overflow: visible;
+  }
+
+  .chartsCluster,
+  .metricsCluster {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+    width: $analysis-mobile-chart-width;
+    row-gap: $analysis-grid-gap;
   }
 
   .chartsCluster {
     grid-template-areas:
-      "scatterChart bellCurve"
-      "halfBlocks halfBlocks";
+      "bellCurve"
+      "halfBlocks"
+      "scatterChart";
   }
 
   .metricsCluster {
+    grid-template-rows: auto;
     grid-template-areas:
-      "scatterBar feature"
-      "container container";
+      "scatterBar"
+      "container"
+      "feature";
+  }
+
+  .gridCell {
+    width: $analysis-mobile-chart-width;
+    min-width: 0;
+    max-width: $analysis-mobile-chart-width;
+    align-items: flex-start;
+  }
+
+  .visualFrame {
+    inset: auto 0 0;
+    left: 0;
+    z-index: $analysis-portrait-z-index-sm;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+    height: $analysis-portrait-frame-height-sm;
+    max-width: none;
+    overflow: visible;
+    transform: scale(calc(#{$analysis-portrait-scale-sm} / #{$analysis-portrait-comp-scale-divisor}))
+      translateY($analysis-portrait-offset-y-sm);
+    transform-origin: bottom center;
+
+    > :global(span) {
+      position: relative !important;
+      inset: auto !important;
+      width: 100% !important;
+      max-width: none;
+      height: auto !important;
+      max-height: none;
+    }
+  }
+
+  .visualMobile {
+    width: 100% !important;
+    max-width: none;
+    object-fit: contain;
+    object-position: bottom center;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Facial analysis dashboard — narrow mobile only (max-width: 375px)
+// ---------------------------------------------------------------------------
+@include down(xxs) {
+  .overlayGrid {
+    top: $analysis-overlay-top-narrow;
+    padding-inline: $space-3;
+    gap: calc(#{$analysis-overlay-cluster-gap-narrow} * var(--analysis-comp-scale, 1));
+    transform: translate(-50%, calc(-50% + #{$analysis-overlay-offset-y-narrow}))
+      scale(
+        calc(
+          #{$analysis-charts-scale-sm} * #{$analysis-charts-scale-narrow-factor} /
+            #{$analysis-charts-comp-scale-divisor}
+        )
+      );
+  }
+
+  .chartsCluster,
+  .metricsCluster {
+    width: $analysis-mobile-chart-width-narrow;
+  }
+
+  .gridCell {
+    width: $analysis-mobile-chart-width-narrow;
+    max-width: $analysis-mobile-chart-width-narrow;
+  }
+
+  .visualFrame {
+    transform: scale(
+        calc(
+          #{$analysis-portrait-scale-sm} * #{$analysis-portrait-scale-narrow-factor} /
+            #{$analysis-portrait-comp-scale-divisor}
+        )
+      )
+      translateY($analysis-portrait-offset-y-narrow);
   }
 }

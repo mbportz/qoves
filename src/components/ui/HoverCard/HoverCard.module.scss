@@ -4,9 +4,9 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: $space-7;
-  min-height: 152px;
-  padding: $space-4;
+  gap: clamp(#{$space-4}, 3vw, #{$space-7});
+  min-height: clamp(7rem, 18vw, 9.5rem);
+  padding: clamp(#{$space-2}, 2.5vw, #{$space-4});
   overflow: hidden;
   border: 1px solid var(--color-border-primary-muted);
   border-radius: 12px;
@@ -74,13 +74,15 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: clamp(1rem, 2.2vw, 1.25rem);
+  height: clamp(1rem, 2.2vw, 1.25rem);
   padding: 2px;
   border-radius: 50%;
   background: var(--color-primary-400);
   color: var(--color-text-button-primary);
   @include text-body-4-zagma;
+  font-size: clamp(0.4375rem, 0.65vw + 0.2rem, 0.625rem);
+  line-height: 1.1;
 }
 
 .content {
@@ -92,4 +94,7 @@
 .title {
   margin: 0;
   color: var(--color-text-primary);
+  @include text-heading-8-book;
+  font-size: clamp(0.5625rem, 0.8vw + 0.3rem, 0.875rem);
+  line-height: 1.3;
 }

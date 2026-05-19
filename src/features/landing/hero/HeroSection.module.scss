@@ -10,6 +10,32 @@ $hero-max-width: 1360px;
   align-items: stretch;
   width: 100%;
   padding: 0;
+
+  :global(.heading-4) {
+    font-size: clamp(1.5rem, 3.2vw, 2.125rem);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+  }
+
+  :global(.body-2) {
+    font-size: clamp(0.75rem, 1.85vw, 0.875rem);
+    line-height: 1.45;
+  }
+
+  :global(.body-4-zagma) {
+    font-size: clamp(0.5rem, 1.1vw, 0.625rem);
+    line-height: 1.15;
+  }
+
+  :global(.body-4-zagma-lg) {
+    font-size: clamp(0.625rem, 1.4vw, 0.8125rem);
+    line-height: 1.2;
+  }
+
+  [data-section-badge] {
+    font-size: clamp(0.5rem, 1.1vw, 0.625rem);
+    line-height: 1.15;
+  }
 }
 
 .content {
@@ -17,7 +43,7 @@ $hero-max-width: 1360px;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding-inline: $hero-content-padding;
+  padding-inline: clamp(#{$space-4}, 4.5vw, #{$hero-content-padding});
   gap: 10px;
 }
 
@@ -30,12 +56,17 @@ $hero-max-width: 1360px;
   width: 100%;
   max-width: $hero-max-width;
   margin-inline: auto;
-  padding-block: $hero-content-padding;
+  padding-block: clamp(#{$space-6}, 6vw, #{$hero-content-padding});
   border-inline: $hero-border;
   @include full-bleed-horizontal-rule(top, $hero-border);
 
   @include up(md) {
     min-height: 238px;
+  }
+
+  @include down(md) {
+    min-height: auto;
+    padding-block: $space-6;
   }
 }
 
@@ -49,7 +80,7 @@ $hero-max-width: 1360px;
   }
 
   :global(.heading-4) {
-    max-width: 659px;
+    max-width: min(659px, 100%);
   }
 }
 
@@ -84,7 +115,7 @@ $hero-max-width: 1360px;
   max-width: $hero-max-width;
   margin-inline: auto;
 
-  @include up(md) {
+  @include up(sm) {
     min-height: 184px;
   }
 }
@@ -92,13 +123,13 @@ $hero-max-width: 1360px;
 .steps {
   position: relative;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: stretch;
   width: 100%;
   border-inline: $hero-border;
   @include full-bleed-horizontal-rule(both, $hero-border);
 
-  @include up(lg) {
-    flex-direction: row;
+  @include up(sm) {
     align-items: center;
     min-height: 184px;
   }
@@ -107,23 +138,16 @@ $hero-max-width: 1360px;
 .stepCell {
   display: flex;
   flex: 1;
+  min-width: 0;
   align-items: center;
-  padding: $space-4;
+  padding: clamp(#{$space-2}, 2vw, #{$space-4});
 
-  @include up(lg) {
+  @include up(sm) {
     min-height: 184px;
-
-    &:not(:last-child) {
-      border-right: 1px solid var(--color-border-primary-muted);
-    }
   }
 
   &:not(:last-child) {
-    border-bottom: 1px solid var(--color-border-primary-muted);
-
-    @include up(lg) {
-      border-bottom: none;
-    }
+    border-right: 1px solid var(--color-border-primary-muted);
   }
 
   > * {

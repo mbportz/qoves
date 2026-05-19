@@ -1,0 +1,12 @@
+@use "@/styles/tokens" as *;
+
+.page {
+  width: 100%;
+  overflow-x: clip;
+}
+
+.heroBlock {
+  @media (max-width: $breakpoint-sm) {
+    display: none;
+  }
+}
