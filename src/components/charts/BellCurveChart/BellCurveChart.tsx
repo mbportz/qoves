@@ -5,11 +5,11 @@ import { motion, shouldSimplifyMotion } from "@/lib/gsap";
 import gsap from "gsap";
 import { useEffect, useRef, useState } from "react";
 import {
-  BELL_CURVE_PLOT,
   BELL_CURVE_VIEWBOX,
-  applyBellCurveSelectionAt,
+  applyBellCurveReveal,
   collectBellCurveSelection,
-  getBellCurveSelectionX,
+  resetBellCurveReveal,
+  setupBellCurveFills,
   type BellCurveSelection,
 } from "./bellCurveSelection";
 import styles from "./BellCurveChart.module.scss";
@@ -18,33 +18,31 @@ type BellCurveChartProps = {
   className?: string;
 };
 
-type SelectionTweenState = {
-  x: number;
+type RevealTweenState = {
+  reveal: number;
 };
 
-function tweenSelection(
+function tweenReveal(
   selection: BellCurveSelection,
-  state: SelectionTweenState,
+  state: RevealTweenState,
   hovered: boolean,
   animate: boolean,
 ) {
-  const targetX = getBellCurveSelectionX(hovered);
+  const targetReveal = hovered ? 1 : 0;
 
   if (!animate || shouldSimplifyMotion()) {
-    state.x = targetX;
-    applyBellCurveSelectionAt(selection, targetX, hovered);
+    state.reveal = targetReveal;
+    applyBellCurveReveal(selection, targetReveal);
     return;
   }
 
-  state.x = hovered ? BELL_CURVE_PLOT.defaultX : BELL_CURVE_PLOT.xMin;
-
   gsap.to(state, {
-    x: targetX,
+    reveal: targetReveal,
     duration: motion.duration.slow,
     ease: motion.ease.soft,
     overwrite: true,
     onUpdate: () => {
-      applyBellCurveSelectionAt(selection, state.x, hovered);
+      applyBellCurveReveal(selection, state.reveal);
     },
   });
 }
@@ -61,7 +59,7 @@ export function BellCurveChart({ className }: BellCurveChartProps) {
       .then((response) => response.text())
       .then((svg) => {
         if (!cancelled) {
-          setMarkup(svg);
+          setMarkup(svg.replace(/<foreignObject[\s\S]*?<\/foreignObject>/gi, ""));
         }
       });
 
@@ -84,16 +82,17 @@ export function BellCurveChart({ className }: BellCurveChartProps) {
       return undefined;
     }
 
-    const tweenState: SelectionTweenState = { x: BELL_CURVE_PLOT.defaultX };
+    setupBellCurveFills(selection);
+    resetBellCurveReveal(selection);
 
-    applyBellCurveSelectionAt(selection, BELL_CURVE_PLOT.defaultX, false);
+    const tweenState: RevealTweenState = { reveal: 0 };
 
     const onHoverIn = () => {
-      tweenSelection(selection, tweenState, true, true);
+      tweenReveal(selection, tweenState, true, true);
     };
 
     const onHoverOut = () => {
-      tweenSelection(selection, tweenState, false, true);
+      tweenReveal(selection, tweenState, false, true);
     };
 
     root.addEventListener("pointerenter", onHoverIn);
@@ -103,7 +102,7 @@ export function BellCurveChart({ className }: BellCurveChartProps) {
       root.removeEventListener("pointerenter", onHoverIn);
       root.removeEventListener("pointerleave", onHoverOut);
       gsap.killTweensOf(tweenState);
-      applyBellCurveSelectionAt(selection, BELL_CURVE_PLOT.defaultX, false);
+      resetBellCurveReveal(selection);
     };
   }, [markup]);
 
