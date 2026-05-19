@@ -11,8 +11,8 @@ export function LandingPage() {
     <div className={styles.page}>
       <div className={styles.heroBlock}>
         <HeroSection />
-        <SectionSpacer />
       </div>
+      <SectionSpacer />
       <FacialAnalysisSection />
       <SectionSpacer />
       <FaqSection />

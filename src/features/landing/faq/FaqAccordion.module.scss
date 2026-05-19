@@ -204,6 +204,16 @@ $faq-duration: 0.4s;
   }
 }
 
+@include down(xxs) {
+  .category {
+    border-bottom: none;
+  }
+
+  .entry:not(.entryOpen) {
+    border-bottom: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .category,
   .categorySummary,

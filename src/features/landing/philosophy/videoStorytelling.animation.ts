@@ -1,6 +1,7 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, shouldSimplifyMotion, storySelectors } from "@/lib/gsap";
+import { mediaDesktop } from "@/lib/gsap/responsive";
 
 function playStoryVideo(scope: HTMLElement) {
   const video = scope.querySelector<HTMLVideoElement>("[data-story-video] video");
@@ -214,7 +215,7 @@ export function createVideoStorytellingAnimation(scope: HTMLElement) {
     !shouldSimplifyMotion() &&
     vanityBlock &&
     storyVideo &&
-    window.matchMedia("(min-width: 768px)").matches
+    window.matchMedia(mediaDesktop).matches
   ) {
     const pinEnd = mediaPinEnd ?? vanityBlock;
     const parallaxTrigger = mediaPinZone ?? q(storySelectors.media)[0];

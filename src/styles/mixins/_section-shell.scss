@@ -1,8 +1,9 @@
 @use '../tokens/spacing' as *;
+@use '../tokens/landing-shell' as *;
 
 /// Horizontal padding for bordered section shells (hero, analysis, FAQ, etc.)
 @mixin section-inline-padding {
-  padding-inline: clamp(#{$space-4}, 4.5vw, 40px);
+  padding-inline: $landing-shell-padding-inline;
 }
 
 /// Section header block top spacing

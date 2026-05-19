@@ -1,8 +1,8 @@
 @use "@/styles/tokens" as *;
 @use "@/styles/mixins" as *;
 
-$philosophy-max: 1360px;
-$philosophy-content-padding: 46px;
+$philosophy-max: $landing-shell-max-width;
+$philosophy-content-padding: $landing-shell-padding-max;
 $philosophy-stage-min: 957px;
 $philosophy-media-height: min(100svh, $philosophy-stage-min);
 $philosophy-frame-border: 1.15px solid rgb(242 242 242 / 20%);
@@ -10,6 +10,7 @@ $philosophy-inner-border: 1px solid rgb(242 242 242 / 20%);
 $philosophy-tint-bottom: rgb(0 0 0 / 56%);
 $philosophy-tint-top: rgb(0 0 0 / 24%);
 $philosophy-vanity-tint: rgb(0 0 0 / 40%);
+$philosophy-content-tint: rgb(0 0 0 / 28%);
 $philosophy-vanity-card-min: 400px;
 $philosophy-vanity-cards-gap: $space-5;
 $philosophy-vanity-cards-cluster: calc(
@@ -19,6 +20,15 @@ $philosophy-vanity-cards-cluster: calc(
 $philosophy-vanity-last-card-runway: calc(
   #{$philosophy-vanity-card-min} + #{$philosophy-vanity-cards-gap} + #{$space-7}
 );
+$philosophy-glass-card-width: 443px;
+$philosophy-info-card-row-height: 262px;
+$philosophy-info-card-width: 312px;
+$philosophy-info-card-row-height-mobile: 196px;
+$philosophy-glow-up-content-max-mobile: 380px;
+$philosophy-info-card-width-xxs: 272px;
+$philosophy-info-card-row-height-xxs: 172px;
+$philosophy-glass-card-width-xxs: 300px;
+$philosophy-glass-card-min-height-xxs: 340px;
 // Scroll span for questions + vanity (video unpins when this ends)
 $philosophy-scroll-span: calc(
   #{$philosophy-stage-min} + #{$philosophy-media-height} + #{$philosophy-vanity-cards-cluster} +
@@ -45,6 +55,29 @@ $philosophy-scroll-span: calc(
   backdrop-filter: blur($amount);
 }
 
+@mixin philosophy-horizontal-scroll {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  touch-action: pan-x;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+// Break a child out to the viewport width (for edge-to-edge horizontal scroll).
+@mixin philosophy-viewport-bleed-scroll {
+  @include philosophy-horizontal-scroll;
+
+  box-sizing: border-box;
+  width: 100vw;
+  max-width: 100vw;
+  margin-inline: calc(50% - 50vw);
+  padding-inline: $landing-shell-padding-inline;
+}
+
 .root {
   position: relative;
   display: flex;
@@ -65,24 +98,17 @@ $philosophy-scroll-span: calc(
   position: relative;
   z-index: 0;
   width: 100%;
+  height: $philosophy-scroll-span;
   pointer-events: none;
-
-  @include up(md) {
-    height: $philosophy-scroll-span;
-  }
 }
 
 .media {
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 0;
   width: 100%;
   height: $philosophy-media-height;
   pointer-events: auto;
-
-  @include up(md) {
-    position: sticky;
-    top: 0;
-  }
 }
 
 .video {
@@ -132,11 +158,8 @@ $philosophy-scroll-span: calc(
   align-items: center;
   width: 100%;
   min-height: $philosophy-scroll-span;
-
-  @include up(md) {
-    margin-top: calc(-1 * #{$philosophy-scroll-span});
-  }
-  padding-inline: clamp(#{$space-4}, 4.5vw, #{$philosophy-content-padding});
+  margin-top: calc(-1 * #{$philosophy-scroll-span});
+  padding-inline: $landing-shell-padding-inline;
   pointer-events: none;
 }
 
@@ -152,11 +175,11 @@ $philosophy-scroll-span: calc(
 
 // Combined section: blur/tint span both panels; steeper ramp, stronger peak blur.
 $content-blur-offset: 14%;
-$content-blur-stop: 42%;
-$content-tint-full-start: 50%;
+$content-blur-stop: 22%;
+$content-tint-full-start: 30%;
 $content-blur-max: 36px;
 $content-blur-amount: $content-blur-max;
-$content-handoff-tint: $philosophy-vanity-tint;
+$content-handoff-tint: $philosophy-content-tint;
 
 @mixin philosophy-content-blur-mask {
   -webkit-mask-image: linear-gradient(
@@ -244,6 +267,14 @@ $content-handoff-tint: $philosophy-vanity-tint;
   color: var(--color-text-button-primary);
 }
 
+.badgeLabelMobile {
+  display: none;
+}
+
+.descriptionMobile {
+  display: none;
+}
+
 .copy {
   display: flex;
   flex-direction: column;
@@ -262,11 +293,19 @@ $content-handoff-tint: $philosophy-vanity-tint;
 
 .cardsRow {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
   width: 100%;
+  min-height: $philosophy-info-card-row-height;
   @include full-bleed-horizontal-rule(top, $philosophy-inner-border);
+}
+
+.cardsRowTrack {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 0;
+  width: 100%;
+  min-height: $philosophy-info-card-row-height;
 }
 
 .cardSlot {
@@ -275,7 +314,11 @@ $content-handoff-tint: $philosophy-vanity-tint;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 200px;
+  min-height: $philosophy-info-card-row-height;
+
+  &:not(:last-child) {
+    border-inline-end: $philosophy-inner-border;
+  }
 }
 
 .card {
@@ -284,21 +327,8 @@ $content-handoff-tint: $philosophy-vanity-tint;
   min-height: 0;
 }
 
-@include up(md) {
-  .cardsRow {
-    flex-direction: row;
-    align-items: stretch;
-    gap: 0;
-    min-height: 262px;
-  }
-
-  .cardSlot {
-    min-height: 262px;
-
-    &:not(:last-child) {
-      border-inline-end: $philosophy-inner-border;
-    }
-  }
+.mobileAction {
+  display: none;
 }
 
 // Vanity block — hero pins like video; cards scroll over
@@ -340,6 +370,9 @@ $content-handoff-tint: $philosophy-vanity-tint;
 }
 
 .vanityHeroSticky {
+  position: sticky;
+  top: 0;
+  z-index: 1;
   display: flex;
   flex-shrink: 0;
   align-items: center;
@@ -347,12 +380,6 @@ $content-handoff-tint: $philosophy-vanity-tint;
   width: 100%;
   min-height: $philosophy-media-height;
   pointer-events: none;
-
-  @media (min-width: 768px) {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-  }
 }
 
 .vanityHero {
@@ -370,8 +397,13 @@ $content-handoff-tint: $philosophy-vanity-tint;
   z-index: 4;
   flex-shrink: 0;
   width: 100%;
-  min-height: calc(#{$philosophy-vanity-cards-cluster} + #{$philosophy-vanity-last-card-runway});
   pointer-events: none;
+}
+
+.vanityCardsStageTrack {
+  position: relative;
+  width: 100%;
+  min-height: calc(#{$philosophy-vanity-cards-cluster} + #{$philosophy-vanity-last-card-runway});
 }
 
 .vanityTitle,
@@ -394,7 +426,7 @@ $content-handoff-tint: $philosophy-vanity-tint;
 
 .vanityTitleAccent {
   display: block;
-  color: var(--color-text-disabled);
+  color: rgb(255 255 255 / 0.62);
 }
 
 .vanityDescription {
@@ -436,66 +468,127 @@ $content-handoff-tint: $philosophy-vanity-tint;
   pointer-events: none;
 }
 
-@include down(md) {
-  .mediaPinZone {
-    height: auto;
+// 768px and below — desktop layout; glass cards scroll horizontally when they overflow
+@include down(sm) {
+  .content,
+  .questionsStage,
+  .wrapper,
+  .glowUp,
+  .vanityBlock,
+  .vanityWrapper,
+  .vanityGlow {
+    overflow-x: visible;
   }
 
-  .media {
-    position: relative;
-    height: min(72svh, 640px);
-  }
-
-  .videoEl {
-    width: 100%;
-    height: 100%;
-    min-width: 0;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .content {
-    margin-top: 0;
-    min-height: auto;
-  }
-
-  .questionsStage {
-    min-height: auto;
+  .glowUp {
+    align-items: center;
   }
 
   .frame {
-    min-height: min(420px, 70svh);
-    padding: clamp(#{$space-4}, 4vw, #{$space-5});
+    align-items: center;
+    justify-content: flex-end;
+    gap: $space-4;
+    width: min(100%, #{$philosophy-glow-up-content-max-mobile});
+    max-width: $philosophy-glow-up-content-max-mobile;
+    margin-inline: auto;
+    padding-inline: $space-4;
+    text-align: center;
   }
 
-  .wrapper {
-    min-height: auto;
+  .badge {
+    align-self: center;
+    max-width: 100%;
+    text-align: center;
   }
 
-  .vanityBlock {
-    min-height: auto;
+  .badgeLabelDesktop {
+    display: none;
   }
 
-  .vanityWrapper {
-    min-height: auto;
+  .badgeLabelMobile {
+    display: inline;
   }
 
-  .vanityGlow {
-    min-height: auto;
+  .descriptionDesktop {
+    display: none;
   }
 
-  .vanityHeroSticky {
-    position: relative;
-    min-height: auto;
-    padding-block: $space-7;
+  .descriptionMobile {
+    display: inline;
+  }
+
+  .copy {
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .mobileAction {
+    display: inline-flex;
+    flex: none;
+    align-self: center;
+    margin-block-end: $space-4;
+  }
+
+  .cardsRow {
+    flex: none;
+    align-self: stretch;
+    margin-top: 0;
+    overflow: visible;
+  }
+
+  .cardsRow,
+  .cardsRowTrack,
+  .cardSlot {
+    min-height: $philosophy-info-card-row-height-mobile;
+  }
+
+  .cardsRowTrack {
+    @include philosophy-viewport-bleed-scroll;
+  }
+
+  .cardSlot {
+    flex: 0 0 $philosophy-info-card-width;
+    flex-shrink: 0;
+    width: $philosophy-info-card-width;
+    min-width: $philosophy-info-card-width;
+    max-width: none;
+  }
+
+  .card {
+    flex-shrink: 0;
+    min-width: 100%;
+    padding: $space-2;
+
+    > div {
+      gap: $space-3;
+      min-height: 148px;
+      padding: $space-2;
+    }
+
+    // media row + image
+    > div > div:first-child > div {
+      width: 88px;
+      height: 60px;
+    }
   }
 
   .vanityCardsStage {
-    min-height: auto;
-    padding-block: $space-5;
+    overflow: visible;
+  }
+
+  .vanityCardsStageTrack {
+    @include philosophy-viewport-bleed-scroll;
+
     display: flex;
-    flex-direction: column;
-    gap: $space-5;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: $philosophy-vanity-cards-gap;
+    min-height: $philosophy-vanity-card-min;
+    pointer-events: auto;
   }
 
   .vanityCardLeft,
@@ -503,20 +596,78 @@ $content-handoff-tint: $philosophy-vanity-tint;
     position: relative;
     top: auto;
     right: auto;
-    bottom: auto;
     left: auto;
-    width: 100%;
-    min-height: 320px;
+    flex: 0 0 $philosophy-glass-card-width;
+    flex-shrink: 0;
+    width: $philosophy-glass-card-width;
+    min-width: $philosophy-glass-card-width;
+    max-width: none;
+    z-index: auto;
+
+    > article {
+      flex-shrink: 0;
+      min-width: 100%;
+    }
+  }
+}
+
+// 375px and below — hide grid lines; slightly smaller glass cards
+@include down(xxs) {
+  .wrapper,
+  .cardsRow,
+  .vanityGlow {
+    @include hide-section-grid-lines;
   }
 
-  .vanityHero {
-    width: 100%;
-    max-width: min(549px, 100%);
-    margin-bottom: $space-4;
-    padding-inline: $space-2;
+  .cardSlot:not(:last-child) {
+    border-inline-end: none;
   }
 
-  .vanityDescription {
-    max-width: min(528px, 100%);
+  .cardsRow,
+  .cardsRowTrack,
+  .cardSlot {
+    min-height: $philosophy-info-card-row-height-xxs;
+  }
+
+  .cardSlot {
+    flex: 0 0 $philosophy-info-card-width-xxs;
+    width: $philosophy-info-card-width-xxs;
+    min-width: $philosophy-info-card-width-xxs;
+  }
+
+  .card {
+    padding: $space-2;
+
+    > div {
+      gap: $space-2;
+      min-height: 128px;
+      padding: $space-2;
+    }
+
+    > div > div:first-child > div {
+      width: 76px;
+      height: 52px;
+    }
+  }
+
+  .vanityCardsStageTrack {
+    min-height: $philosophy-glass-card-min-height-xxs;
+  }
+
+  .vanityCardLeft,
+  .vanityCardRight {
+    flex: 0 0 $philosophy-glass-card-width-xxs;
+    width: $philosophy-glass-card-width-xxs;
+    min-width: $philosophy-glass-card-width-xxs;
+
+    > article {
+      min-height: $philosophy-glass-card-min-height-xxs;
+
+      > div:nth-child(3) {
+        min-height: $philosophy-glass-card-min-height-xxs;
+        padding: $space-3;
+        gap: $space-3;
+      }
+    }
   }
 }

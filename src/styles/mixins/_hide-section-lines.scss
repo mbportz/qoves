@@ -1,0 +1,12 @@
+/// Remove section grid lines (inline borders + full-bleed horizontal rules).
+@mixin hide-section-grid-lines {
+  border: none;
+  border-inline: none;
+  border-block: none;
+
+  &::before,
+  &::after {
+    display: none;
+    content: none;
+  }
+}

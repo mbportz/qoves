@@ -1,8 +1,8 @@
 @use "@/styles/tokens" as *;
 @use "@/styles/mixins" as *;
 
-$faq-content-padding: 40px;
-$faq-glow-up-max: 1360px;
+$faq-content-padding: $landing-shell-padding-max;
+$faq-glow-up-max: $landing-shell-max-width;
 $faq-details-max: 1080px;
 $faq-ease: cubic-bezier(0.22, 1, 0.36, 1);
 $faq-duration: 0.5s;
@@ -25,7 +25,7 @@ $faq-border: 1px solid var(--color-border-primary-muted);
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding-inline: clamp(#{$space-4}, 4.5vw, #{$faq-content-padding});
+  padding-inline: $landing-shell-padding-inline;
   gap: 10px;
   pointer-events: auto;
 }
@@ -184,5 +184,15 @@ $faq-border: 1px solid var(--color-border-primary-muted);
 
   .detailsContainer {
     padding: $space-2;
+  }
+}
+
+@include down(xxs) {
+  .glowUp {
+    @include hide-section-grid-lines;
+  }
+
+  .category {
+    border-bottom: none;
   }
 }

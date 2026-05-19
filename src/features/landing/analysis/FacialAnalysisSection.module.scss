@@ -1,16 +1,16 @@
 @use "@/styles/tokens" as *;
 @use "@/styles/mixins" as *;
 
-$analysis-content-padding: 40px;
-$analysis-frame-max: 1840px;
+$analysis-content-padding: $landing-shell-padding-max;
+$analysis-frame-max: $landing-shell-max-width;
 $analysis-section-min-height: 832px;
 $analysis-header-min-height: 214px;
 $analysis-card-height: 530px;
 
 $analysis-border: 1px solid var(--color-border-glass);
-$analysis-radial-tint: rgb(35 49 55 / 14%);
+$analysis-radial-tint: rgb(35 49 55 / 28%);
 
-// Mobile overrides (768px and below) — see .cursor/rules/facial-analysis-layout.mdc
+// Mobile (≤768px): see .cursor/rules/facial-analysis-layout.mdc
 $analysis-card-gap-sm: -20px;
 $analysis-card-gap-narrow: -16px;
 
@@ -36,9 +36,10 @@ $analysis-card-gap-narrow: -16px;
     position: absolute;
     inset: 0;
     background: radial-gradient(
-      ellipse 72% 50% at 50% 56%,
+      ellipse 78% 115% at 50% 56%,
       $analysis-radial-tint 0%,
-      transparent 72%
+      rgb(35 49 55 / 12%) 50%,
+      transparent 86%
     );
   }
 }
@@ -70,7 +71,7 @@ $analysis-card-gap-narrow: -16px;
   align-items: stretch;
   width: 100%;
   min-height: $analysis-section-min-height;
-  padding-inline: clamp(#{$space-4}, 4.5vw, #{$analysis-content-padding});
+  padding-inline: $landing-shell-padding-inline;
   gap: 10px;
 }
 
@@ -142,7 +143,8 @@ $analysis-card-gap-narrow: -16px;
 // ---------------------------------------------------------------------------
 @include down(sm) {
   .root {
-    overflow: hidden;
+    overflow-x: clip;
+    overflow-y: hidden;
     padding-bottom: 0;
     margin-bottom: 0;
   }
@@ -150,7 +152,7 @@ $analysis-card-gap-narrow: -16px;
   .glowUp {
     position: relative;
     z-index: 1;
-    padding: $space-7 clamp(#{$space-4}, 4.5vw, #{$analysis-content-padding}) 0;
+    padding: $space-7 $landing-shell-padding-inline 0;
   }
 
   .content {
@@ -160,14 +162,14 @@ $analysis-card-gap-narrow: -16px;
   }
 
   .frame {
-    container-type: inline-size;
-    container-name: analysis-section;
     padding-bottom: 0;
     margin-bottom: 0;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .cardContainer {
+    @include landing-shell-viewport-bleed;
+
     position: relative;
     z-index: 2;
     flex: 1;
@@ -183,6 +185,10 @@ $analysis-card-gap-narrow: -16px;
 // Facial analysis section — narrow mobile only (max-width: 375px)
 // ---------------------------------------------------------------------------
 @include down(xxs) {
+  .frame {
+    @include hide-section-grid-lines;
+  }
+
   .glowUp {
     padding-top: $space-6;
   }

@@ -6,6 +6,7 @@ export { Button, type ButtonSize, type ButtonVariant } from "./Button/Button";
 export { Card } from "./Card/Card";
 export { ChartCard } from "./ChartCard/ChartCard";
 export { Container } from "./Container/Container";
+export { GlassActionButton } from "./GlassActionButton/GlassActionButton";
 export { GlassInfoCard } from "./GlassInfoCard/GlassInfoCard";
 export { GlassScrollingCard } from "./GlassScrollingCard/GlassScrollingCard";
 export { HoverCard } from "./HoverCard/HoverCard";

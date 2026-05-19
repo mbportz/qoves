@@ -1,0 +1,18 @@
+@use "./spacing" as *;
+
+/// Shared bordered shell width + inset for landing sections and spacers.
+$landing-shell-max-width: 1360px;
+$landing-shell-padding-max: 40px;
+$landing-shell-padding-inline: clamp(
+  #{$space-4},
+  4.5vw,
+  #{$landing-shell-padding-max}
+);
+
+/// Break a block out to the viewport width (charts/cards edge bleed). Parent must allow overflow-x.
+@mixin landing-shell-viewport-bleed {
+  box-sizing: border-box;
+  width: 100vw;
+  max-width: 100vw;
+  margin-inline: calc(50% - 50vw);
+}

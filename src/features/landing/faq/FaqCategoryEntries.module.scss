@@ -86,6 +86,12 @@ $list-duration: 0.45s;
   transition: opacity $list-duration $list-ease;
 }
 
+@include down(xxs) {
+  .entry:not([open]) {
+    border-bottom: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .entry {
     interpolate-size: auto;

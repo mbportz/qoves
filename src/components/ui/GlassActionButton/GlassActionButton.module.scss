@@ -1,0 +1,45 @@
+@use "@/styles/tokens" as *;
+
+$glass-action-width: 212px;
+$glass-action-height: 48px;
+$glass-action-surface: rgb(255 255 255 / 20%);
+$glass-action-icon-surface: rgb(255 255 255 / 10%);
+
+.root {
+  display: inline-flex;
+  flex: none;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: fit-content;
+  min-width: $glass-action-width;
+  max-width: 100%;
+  height: $glass-action-height;
+  padding: 4px 4px 4px 20px;
+  border: none;
+  border-radius: 8px;
+  background: $glass-action-surface;
+  color: var(--color-text-button-primary);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.label {
+  flex: none;
+  color: inherit;
+  white-space: nowrap;
+}
+
+.iconButton {
+  display: inline-flex;
+  flex: none;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 12px;
+  border-radius: 6px;
+  background: $glass-action-icon-surface;
+}

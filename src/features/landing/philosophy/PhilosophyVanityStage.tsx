@@ -26,20 +26,22 @@ export function PhilosophyVanityStage() {
           </div>
 
           <div className={styles.vanityCardsStage} data-story-vanity-cards-stage>
-            <div className={styles.vanityCardLeft} data-story-vanity-card>
-              <GlassScrollingCard
-                tone="onVideo"
-                title={considerCard.title}
-                items={considerCard.items}
-              />
-            </div>
+            <div className={styles.vanityCardsStageTrack}>
+              <div className={styles.vanityCardLeft} data-story-vanity-card>
+                <GlassScrollingCard
+                  tone="onVideo"
+                  title={considerCard.title}
+                  items={considerCard.items}
+                />
+              </div>
 
-            <div className={styles.vanityCardRight} data-story-vanity-card>
-              <GlassScrollingCard
-                tone="onVideo"
-                title={intelligentCard.title}
-                items={intelligentCard.items}
-              />
+              <div className={styles.vanityCardRight} data-story-vanity-card>
+                <GlassScrollingCard
+                  tone="onVideo"
+                  title={intelligentCard.title}
+                  items={intelligentCard.items}
+                />
+              </div>
             </div>
           </div>
         </div>

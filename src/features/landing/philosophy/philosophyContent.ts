@@ -15,9 +15,13 @@ export type PhilosophyCard = {
 
 export const philosophySectionContent = {
   badge: "YOUR QUESTIONS",
+  badgeMobile: "BACKED BY 2000+ RESEARCH PAPERS",
   title: "Will analyzing my face Make me insecure?",
   description:
     "Most insecurity comes from uncertainty—not knowing if your concerns are real or imagined. When you're guessing about your appearance, your mind often makes things seem worse than they are.",
+  descriptionMobile:
+    "Get your personalized facial analysis and transformation plan based on 2000+ academic studies.",
+  mobileActionLabel: "Start your glow-up",
 } as const;
 
 export const philosophyCards: PhilosophyCard[] = [

@@ -19,7 +19,7 @@ export function SectionSpacer({
   innerClassName,
   height = 120,
   maxWidth = 1360,
-  paddingInline = 40,
+  paddingInline,
   bordered = true,
   style,
   ...props
@@ -28,7 +28,9 @@ export function SectionSpacer({
     ...style,
     "--section-spacer-height": `${height}px`,
     "--section-spacer-max-width": `${maxWidth}px`,
-    "--section-spacer-padding-inline": `${paddingInline}px`,
+    ...(paddingInline == null
+      ? {}
+      : { "--section-spacer-padding-inline": `${paddingInline}px` }),
   } as CSSProperties;
 
   return (

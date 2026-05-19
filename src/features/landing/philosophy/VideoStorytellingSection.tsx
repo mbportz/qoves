@@ -1,6 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/Badge/Badge";
+import { GlassActionButton } from "@/components/ui/GlassActionButton/GlassActionButton";
 import { GlassInfoCard } from "@/components/ui/GlassInfoCard/GlassInfoCard";
 import { useSectionAnimation } from "@/lib/gsap";
 import { philosophyCards, philosophySectionContent } from "./philosophyContent";
@@ -53,39 +54,58 @@ export function VideoStorytellingSection() {
             <div className={styles.wrapper}>
               <div className={styles.glowUp}>
                 <div className={styles.frame}>
-                  <Badge className={styles.badge}>{philosophySectionContent.badge}</Badge>
+                  <Badge className={styles.badge}>
+                    <span className={styles.badgeLabelDesktop}>
+                      {philosophySectionContent.badge}
+                    </span>
+                    <span className={styles.badgeLabelMobile}>
+                      {philosophySectionContent.badgeMobile}
+                    </span>
+                  </Badge>
 
                   <div className={styles.copy} data-story-copy>
                     <h2 id="philosophy-title" className={`heading-5 ${styles.title}`}>
                       {philosophySectionContent.title}
                     </h2>
                     <p className={`body-2 ${styles.description}`}>
-                      {philosophySectionContent.description}
+                      <span className={styles.descriptionDesktop}>
+                        {philosophySectionContent.description}
+                      </span>
+                      <span className={styles.descriptionMobile}>
+                        {philosophySectionContent.descriptionMobile}
+                      </span>
                     </p>
                   </div>
                 </div>
 
+                <GlassActionButton
+                  className={styles.mobileAction}
+                  label={philosophySectionContent.mobileActionLabel}
+                />
+
                 <div className={styles.cardsRow} data-story-cards-row>
-                  {philosophyCards.map((card) => (
-                    <div key={card.id} className={styles.cardSlot} data-story-card>
-                      <GlassInfoCard
-                        className={styles.card}
-                        tone="onVideo"
-                        title={card.title}
-                        subtitle={card.subtitle}
-                        image={
-                          card.image
-                            ? {
-                                src: card.image.src,
-                                alt: card.image.alt,
-                                width: 120,
-                                height: 81,
-                              }
-                            : undefined
-                        }
-                      />
-                    </div>
-                  ))}
+                  <div className={styles.cardsRowTrack}>
+                    {philosophyCards.map((card) => (
+                      <div key={card.id} className={styles.cardSlot} data-story-card>
+                        <GlassInfoCard
+                          className={styles.card}
+                          tone="onVideo"
+                          title={card.title}
+                          subtitle={card.subtitle}
+                          image={
+                            card.image
+                              ? {
+                                  src: card.image.src,
+                                  alt: card.image.alt,
+                                  width: 120,
+                                  height: 81,
+                                }
+                              : undefined
+                          }
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
