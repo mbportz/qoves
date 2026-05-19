@@ -242,8 +242,8 @@ $container-height: 157;
   overflow: visible;
   grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
   grid-template-areas:
-    "scatterBar container"
-    "scatterBar feature";
+    "scatterBar feature"
+    "scatterBar container";
 }
 
 .gridCell {

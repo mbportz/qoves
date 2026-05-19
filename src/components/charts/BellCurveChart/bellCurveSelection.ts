@@ -21,13 +21,11 @@ const SVG_NS = "http://www.w3.org/2000/svg";
 const REGION_CLIP_ID = "bell-curve-region-clip";
 const REVEAL_CLIP_ID = "bell-curve-reveal-clip";
 
-const REVEAL_WIDTH =
-  BELL_CURVE_PLOT.rightX - BELL_CURVE_PLOT.leftX;
+const REVEAL_WIDTH = BELL_CURVE_PLOT.rightX - BELL_CURVE_PLOT.leftX;
 
 export type BellCurveSelection = {
   revealRect: SVGRectElement;
-  tailFill: SVGPathElement;
-  innerFill: SVGPathElement;
+  fill: SVGPathElement;
 };
 
 function buildRegionUnderCurve() {
@@ -111,6 +109,14 @@ function wrapRevealLayer(fillGroup: SVGGElement, revealClipId: string) {
   return revealLayer;
 }
 
+function removeLegacyFills(fillGroup: SVGGElement) {
+  fillGroup.querySelector('g[mask*="mask1"]')?.remove();
+  fillGroup.querySelector<SVGMaskElement>("mask[id^='mask1']")?.remove();
+  fillGroup
+    .querySelector<SVGPathElement>('path[fill="#9AAEB5"][d*="269.413"]')
+    ?.remove();
+}
+
 function prepareFillLayer(host: HTMLElement) {
   const svg = host.querySelector("svg");
 
@@ -125,10 +131,7 @@ function prepareFillLayer(host: HTMLElement) {
   }
 
   fillGroup.removeAttribute("mask");
-
-  const innerGroup = fillGroup.querySelector<SVGGElement>('g[mask*="mask1"]');
-
-  innerGroup?.removeAttribute("mask");
+  removeLegacyFills(fillGroup);
 
   const defs = getDefs(svg);
 
@@ -147,24 +150,20 @@ function prepareFillLayer(host: HTMLElement) {
 
 export function collectBellCurveSelection(host: HTMLElement): BellCurveSelection | null {
   const revealRect = prepareFillLayer(host);
-  const tailFill = host.querySelector<SVGPathElement>('path[fill="#CDDBE1"]');
-  const innerFill = host.querySelector<SVGPathElement>(
-    'path[fill="#9AAEB5"][d*="269.413"]',
-  );
+  const fill = host.querySelector<SVGPathElement>('path[fill="#CDDBE1"]');
 
-  if (!revealRect || !tailFill || !innerFill) {
+  if (!revealRect || !fill) {
     return null;
   }
 
   return {
     revealRect,
-    tailFill,
-    innerFill,
+    fill,
   };
 }
 
 export function setupBellCurveFills(selection: BellCurveSelection) {
-  selection.tailFill.setAttribute("d", buildRegionUnderCurve());
+  selection.fill.setAttribute("d", buildRegionUnderCurve());
 }
 
 /** `reveal` 0 = hidden, 1 = fully shown (wipes right → left). */
@@ -175,8 +174,7 @@ export function applyBellCurveReveal(selection: BellCurveSelection, reveal: numb
 
   selection.revealRect.setAttribute("x", String(x));
   selection.revealRect.setAttribute("width", String(width));
-  selection.tailFill.setAttribute("opacity", String(lerp(0, 0.5, amount)));
-  selection.innerFill.setAttribute("opacity", String(lerp(0, 0.6, amount)));
+  selection.fill.setAttribute("opacity", String(lerp(0, 0.5, amount)));
 }
 
 export function resetBellCurveReveal(selection: BellCurveSelection) {
