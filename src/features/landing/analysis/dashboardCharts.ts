@@ -1,4 +1,3 @@
-import bellCurveChartImage from "@/assets/Bell_curve_Chart.svg";
 import containerImage from "@/assets/Container.svg";
 import halfBlocksImage from "@/assets/Half_Blocks.svg";
 import featureContainerImage from "@/assets/Feature_Container.svg";
@@ -20,13 +19,6 @@ export type DashboardChartConfig = {
 };
 
 export const chartsClusterCharts: DashboardChartConfig[] = [
-  {
-    area: "bellCurve",
-    src: bellCurveChartImage,
-    width: 286,
-    height: 198,
-    sizes: "(max-width: 768px) 22vw, 285px",
-  },
   {
     area: "halfBlocks",
     src: halfBlocksImage,

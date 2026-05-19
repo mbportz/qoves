@@ -1,4 +1,8 @@
-import { ScatterplotChart, ScatterplotChartBar } from "@/components/charts";
+import {
+  BellCurveChart,
+  ScatterplotChart,
+  ScatterplotChartBar,
+} from "@/components/charts";
 import Image, { type StaticImageData } from "next/image";
 import type { ReactNode } from "react";
 import { DashboardChartImage } from "./DashboardChartImage";
@@ -61,6 +65,9 @@ export function AnalysisDashboard({
                 <div className={styles.chartsCluster}>
                   <GridCell area="scatterChart">
                     <ScatterplotChart className={styles.gridChart} />
+                  </GridCell>
+                  <GridCell area="bellCurve">
+                    <BellCurveChart className={styles.gridChart} />
                   </GridCell>
                   {chartsClusterCharts.map((chart) => (
                     <GridCell key={chart.area} area={chart.area}>
