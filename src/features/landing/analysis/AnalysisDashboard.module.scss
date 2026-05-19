@@ -286,6 +286,7 @@ $container-height: 157;
   &[data-grid-area="container"] {
     @include sized-chart-cell($container-width, $container-height, flex-end);
     grid-area: container;
+    pointer-events: auto;
   }
 }
 
@@ -299,7 +300,8 @@ $container-height: 157;
 
 .gridCell[data-grid-area="scatterChart"],
 .gridCell[data-grid-area="scatterBar"],
-.gridCell[data-grid-area="bellCurve"] {
+.gridCell[data-grid-area="bellCurve"],
+.gridCell[data-grid-area="container"] {
   .gridChart {
     object-position: center center;
   }

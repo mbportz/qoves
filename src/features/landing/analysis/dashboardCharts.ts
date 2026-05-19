@@ -1,4 +1,3 @@
-import containerImage from "@/assets/Container.svg";
 import halfBlocksImage from "@/assets/Half_Blocks.svg";
 import featureContainerImage from "@/assets/Feature_Container.svg";
 import type { StaticImageData } from "next/image";
@@ -29,13 +28,6 @@ export const chartsClusterCharts: DashboardChartConfig[] = [
 ];
 
 export const metricsClusterCharts: DashboardChartConfig[] = [
-  {
-    area: "container",
-    src: containerImage,
-    width: 286,
-    height: 157,
-    sizes: "(max-width: 768px) 22vw, 285px",
-  },
   {
     area: "feature",
     src: featureContainerImage,

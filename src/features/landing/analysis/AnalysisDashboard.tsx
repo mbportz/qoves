@@ -1,5 +1,6 @@
 import {
   BellCurveChart,
+  ContainerChart,
   ScatterplotChart,
   ScatterplotChartBar,
 } from "@/components/charts";
@@ -79,6 +80,9 @@ export function AnalysisDashboard({
                 <div className={styles.metricsCluster}>
                   <GridCell area="scatterBar">
                     <ScatterplotChartBar className={styles.gridChart} />
+                  </GridCell>
+                  <GridCell area="container">
+                    <ContainerChart className={styles.gridChart} />
                   </GridCell>
                   {metricsClusterCharts.map((chart) => (
                     <GridCell key={chart.area} area={chart.area}>
