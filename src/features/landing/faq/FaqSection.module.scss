@@ -8,6 +8,7 @@ $faq-ease: cubic-bezier(0.22, 1, 0.36, 1);
 $faq-duration: 0.5s;
 
 $faq-border: 1px solid var(--color-border-primary-muted);
+$faq-glow-up-title-max-sm: 300px;
 
 .root {
   position: relative;
@@ -173,6 +174,14 @@ $faq-border: 1px solid var(--color-border-primary-muted);
 
     &::details-content {
       transition: none;
+    }
+  }
+}
+
+@include down(sm) {
+  .label {
+    :global(.heading-4) {
+      max-width: min(#{$faq-glow-up-title-max-sm}, 100%);
     }
   }
 }
