@@ -17,6 +17,7 @@ export const heroSelectors = {
 export const analysisSelectors = {
   dashboard: "[data-analysis-dashboard]",
   layer: "[data-analysis-layer]",
+  portrait: "[data-analysis-portrait]",
 } as const;
 
 export const storySelectors = {

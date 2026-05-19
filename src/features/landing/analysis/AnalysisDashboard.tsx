@@ -46,7 +46,7 @@ export function AnalysisDashboard({
           <div className={styles.blurRight} aria-hidden />
           <div className={styles.canvas}>
             <div className={styles.visualTrack} data-analysis-layer>
-              <div className={styles.visualFrame}>
+              <div className={styles.visualFrame} data-analysis-portrait>
                 <Image
                   className={`${styles.visual} ${styles.visualDesktop}`}
                   src={desktopImage}
