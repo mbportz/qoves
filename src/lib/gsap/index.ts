@@ -33,7 +33,6 @@ export {
   bindChartBarHover,
   bindGlowHover,
   bindParallaxLayers,
-  bindScatterBarChartHover,
   closeAccordionPanel,
   openAccordionPanel,
 } from "./interactions";

@@ -1,121 +1,196 @@
 "use client";
 
-import scatterplotChartBarImage from "@/assets/Scatterplot_Chart_bar.svg";
+import scatterChartSrc from "@/assets/Scatterplot_Chart_bar.svg";
+import { motion, shouldSimplifyMotion } from "@/lib/gsap";
+import gsap from "gsap";
+import { useEffect, useRef, useState } from "react";
 import {
+  SCATTER_BAR_BARS,
   SCATTER_BAR_DEFAULT_INDEX,
-  getScatterBarMetrics,
-  scatterBarChartLayout,
-  scatterBarTraits,
-} from "@/data/scatterBarChartData";
-import { bindScatterBarChartHover } from "@/lib/gsap";
-import Image from "next/image";
-import { useEffect, useRef } from "react";
+  SCATTER_BAR_VIEWBOX,
+  getScatterBarIndexFromY,
+  getScatterBarTranslateY,
+} from "./scatterBarBars";
 import styles from "./ScatterplotChartBar.module.scss";
 
 type ScatterplotChartBarProps = {
   className?: string;
 };
 
+const HIT_AREA = { x: 128, y: 16, width: 152, height: 290 };
+const BAR_SELECTOR = 'g[clip-path*="clip1_4_17707"] rect';
+
+function setSelectionTranslate(selection: SVGGElement, translateY: number) {
+  selection.setAttribute("transform", `translate(0 ${translateY})`);
+}
+
+function setActiveBar(root: HTMLElement, index: number) {
+  const bars = root.querySelectorAll<SVGRectElement>(".scatter-bar");
+
+  bars.forEach((bar, barIndex) => {
+    const isActive = barIndex === index;
+    bar.classList.toggle("isActive", isActive);
+    bar.classList.toggle("isDimmed", !isActive);
+  });
+}
+
+function applyBarIndex(
+  root: HTMLElement,
+  selection: SVGGElement,
+  selectionOffset: { y: number },
+  index: number,
+  animate: boolean,
+) {
+  const translateY = getScatterBarTranslateY(index);
+  const tween = {
+    y: translateY,
+    duration: motion.duration.fast,
+    ease: motion.ease.soft,
+    overwrite: true,
+    onUpdate: () => {
+      setSelectionTranslate(selection, selectionOffset.y);
+    },
+  };
+
+  if (animate && !shouldSimplifyMotion()) {
+    gsap.to(selectionOffset, tween);
+  } else {
+    gsap.killTweensOf(selectionOffset);
+    selectionOffset.y = translateY;
+    setSelectionTranslate(selection, translateY);
+  }
+
+  setActiveBar(root, index);
+}
+
+function getSvgPoint(svg: SVGSVGElement, event: PointerEvent) {
+  const bounds = svg.getBoundingClientRect();
+  const x =
+    ((event.clientX - bounds.left) / bounds.width) * SCATTER_BAR_VIEWBOX.width;
+  const y =
+    ((event.clientY - bounds.top) / bounds.height) * SCATTER_BAR_VIEWBOX.height;
+
+  return { x, y };
+}
+
 export function ScatterplotChartBar({ className }: ScatterplotChartBarProps) {
   const rootRef = useRef<HTMLDivElement>(null);
-  const defaultMetrics = getScatterBarMetrics(
-    scatterBarTraits[SCATTER_BAR_DEFAULT_INDEX],
-  );
+  const chartRef = useRef<HTMLDivElement>(null);
+  const [markup, setMarkup] = useState<string | null>(null);
+  const activeIndexRef = useRef(SCATTER_BAR_DEFAULT_INDEX);
 
   useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return undefined;
+    let cancelled = false;
 
-    return bindScatterBarChartHover(root);
+    void fetch(scatterChartSrc.src)
+      .then((response) => response.text())
+      .then((svg) => {
+        if (!cancelled) {
+          setMarkup(svg);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
+  useEffect(() => {
+    const host = chartRef.current;
+    const root = rootRef.current;
+    if (!markup || !host || !root) {
+      return undefined;
+    }
+
+    host.innerHTML = markup;
+
+    const svg = host.querySelector("svg");
+    const selection = host.querySelector<SVGGElement>("#scatter-selection");
+    const bars = host.querySelectorAll<SVGRectElement>(BAR_SELECTOR);
+    const selectionOffset = { y: 0 };
+
+    if (!svg || !selection || bars.length !== SCATTER_BAR_BARS.length) {
+      return undefined;
+    }
+
+    bars.forEach((bar, index) => {
+      bar.classList.add("scatter-bar");
+      bar.dataset.barIndex = String(index);
+    });
+
+    applyBarIndex(
+      host,
+      selection,
+      selectionOffset,
+      SCATTER_BAR_DEFAULT_INDEX,
+      false,
+    );
+
+    const onPointerMove = (event: PointerEvent) => {
+      const local = getSvgPoint(svg, event);
+
+      if (
+        local.x < HIT_AREA.x ||
+        local.x > HIT_AREA.x + HIT_AREA.width ||
+        local.y < HIT_AREA.y ||
+        local.y > HIT_AREA.y + HIT_AREA.height
+      ) {
+        return;
+      }
+
+      const index = getScatterBarIndexFromY(local.y);
+
+      if (index === activeIndexRef.current) {
+        return;
+      }
+
+      activeIndexRef.current = index;
+      applyBarIndex(host, selection, selectionOffset, index, true);
+    };
+
+    const onPointerLeave = () => {
+      if (activeIndexRef.current === SCATTER_BAR_DEFAULT_INDEX) {
+        return;
+      }
+
+      activeIndexRef.current = SCATTER_BAR_DEFAULT_INDEX;
+      applyBarIndex(
+        host,
+        selection,
+        selectionOffset,
+        SCATTER_BAR_DEFAULT_INDEX,
+        true,
+      );
+    };
+
+    root.addEventListener("pointermove", onPointerMove);
+    root.addEventListener("pointerleave", onPointerLeave);
+
+    return () => {
+      root.removeEventListener("pointermove", onPointerMove);
+      root.removeEventListener("pointerleave", onPointerLeave);
+      gsap.killTweensOf(selectionOffset);
+      applyBarIndex(
+        host,
+        selection,
+        selectionOffset,
+        SCATTER_BAR_DEFAULT_INDEX,
+        false,
+      );
+      activeIndexRef.current = SCATTER_BAR_DEFAULT_INDEX;
+    };
+  }, [markup]);
+
   return (
-    <div
-      ref={rootRef}
-      className={`${styles.root} ${className ?? ""}`.trim()}
-      data-scatter-bar-chart
-    >
-      <Image
-        className={styles.artwork}
-        src={scatterplotChartBarImage}
-        alt=""
-        width={scatterBarChartLayout.viewBox.width}
-        height={scatterBarChartLayout.viewBox.height}
-        sizes="(max-width: 768px) 28vw, 285px"
-        priority={false}
+    <div ref={rootRef} className={`${styles.root} ${className ?? ""}`.trim()}>
+      <div
+        ref={chartRef}
+        className={styles.chart}
         aria-hidden
+        style={{
+          aspectRatio: `${SCATTER_BAR_VIEWBOX.width} / ${SCATTER_BAR_VIEWBOX.height}`,
+        }}
       />
-      <svg
-        className={styles.overlay}
-        viewBox={`0 0 ${scatterBarChartLayout.viewBox.width} ${scatterBarChartLayout.viewBox.height}`}
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden
-      >
-        <rect
-          className={styles.hitArea}
-          data-scatter-hit
-          x={scatterBarChartLayout.hitArea.x}
-          y={scatterBarChartLayout.hitArea.y}
-          width={scatterBarChartLayout.hitArea.width}
-          height={scatterBarChartLayout.hitArea.height}
-        />
-        <line
-          className={styles.guide}
-          data-scatter-top-line
-          x1={scatterBarChartLayout.lines.top.x1}
-          x2={scatterBarChartLayout.lines.top.x2}
-          y1={defaultMetrics.topLineY}
-          y2={defaultMetrics.topLineY}
-        />
-        <line
-          className={styles.guide}
-          data-scatter-bottom-line
-          x1={scatterBarChartLayout.lines.bottom.x1}
-          x2={scatterBarChartLayout.lines.bottom.x2}
-          y1={defaultMetrics.bottomLineY}
-          y2={defaultMetrics.bottomLineY}
-        />
-        <line
-          className={styles.guide}
-          data-scatter-connector-top
-          x1={scatterBarChartLayout.lines.connectorTop.x1}
-          x2={scatterBarChartLayout.lines.connectorTop.x2}
-          y1={defaultMetrics.connectorTopY}
-          y2={defaultMetrics.connectorTopY}
-        />
-        <line
-          className={styles.guide}
-          data-scatter-connector-bottom
-          x1={scatterBarChartLayout.lines.connectorBottom.x1}
-          x2={scatterBarChartLayout.lines.connectorBottom.x2}
-          y1={defaultMetrics.connectorBottomY}
-          y2={defaultMetrics.connectorBottomY}
-        />
-        <rect
-          className={styles.indicator}
-          data-scatter-indicator
-          x={scatterBarChartLayout.indicator.x}
-          y={defaultMetrics.indicatorY}
-          width={scatterBarChartLayout.indicator.width}
-          height={scatterBarChartLayout.indicator.height}
-          transform={`rotate(90 ${scatterBarChartLayout.indicator.x} ${defaultMetrics.indicatorY})`}
-          stroke={scatterBarChartLayout.indicator.stroke}
-          strokeOpacity={scatterBarChartLayout.indicator.strokeOpacity}
-          strokeWidth={scatterBarChartLayout.indicator.strokeWidth}
-        />
-        <rect
-          className={styles.highlight}
-          data-scatter-highlight
-          x={scatterBarChartLayout.highlight.x}
-          y={defaultMetrics.highlightY}
-          width={scatterBarChartLayout.highlight.width}
-          height={defaultMetrics.highlightHeight}
-          rx={scatterBarChartLayout.highlight.rx}
-          stroke={scatterBarChartLayout.highlight.stroke}
-          strokeWidth={scatterBarChartLayout.highlight.strokeWidth}
-        />
-      </svg>
     </div>
   );
 }

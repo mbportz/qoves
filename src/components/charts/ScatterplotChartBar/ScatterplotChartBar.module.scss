@@ -5,45 +5,44 @@
   height: 100%;
   cursor: crosshair;
   touch-action: none;
+  /* Parent overlay uses pointer-events: none; re-enable for hover. */
+  pointer-events: auto;
 }
 
-.artwork {
+.chart {
   display: block;
   width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center center;
-  pointer-events: none;
-  user-select: none;
+  height: auto;
+  max-height: 100%;
 }
 
-.overlay {
-  position: absolute;
-  inset: 0;
+.chart :global(svg) {
+  display: block;
   width: 100%;
-  height: 100%;
-  overflow: visible;
+  height: auto;
 }
 
-.hitArea {
-  fill: transparent;
-  stroke: none;
+.chart :global(.scatter-bar) {
+  transition:
+    opacity 0.2s ease,
+    filter 0.2s ease;
 }
 
-.highlight {
-  fill: none;
-  opacity: 0.85;
+.chart :global(.scatter-bar.isDimmed) {
+  opacity: 0.45;
+}
+
+.chart :global(.scatter-bar.isActive) {
+  opacity: 1;
+  filter: brightness(1.12);
+}
+
+.chart :global(#scatter-selection) {
   pointer-events: none;
 }
 
-.indicator {
-  fill: none;
-  pointer-events: none;
-}
-
-.guide {
-  stroke: #f2f2f2;
-  stroke-opacity: 0.5;
-  stroke-width: 0.5625;
-  pointer-events: none;
+@media (prefers-reduced-motion: reduce) {
+  .chart :global(.scatter-bar) {
+    transition: none;
+  }
 }

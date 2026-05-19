@@ -26,6 +26,7 @@ function clearAnalysisMotionStyles(scope: HTMLElement) {
   if (layers.length) {
     gsap.set(layers, { clearProps: "opacity" });
   }
+
 }
 
 function setupAnalysisMotion(scope: HTMLElement, desktop: boolean) {
