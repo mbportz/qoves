@@ -2,7 +2,6 @@ import bellCurveChartImage from "@/assets/Bell_curve_Chart.svg";
 import containerImage from "@/assets/Container.svg";
 import halfBlocksImage from "@/assets/Half_Blocks.svg";
 import featureContainerImage from "@/assets/Feature_Container.svg";
-import scatterplotChartImage from "@/assets/Scatterplot_Chart.svg";
 import type { StaticImageData } from "next/image";
 
 export type DashboardGridArea =
@@ -34,13 +33,6 @@ export const chartsClusterCharts: DashboardChartConfig[] = [
     width: 285,
     height: 127,
     sizes: "(max-width: 768px) 22vw, 284px",
-  },
-  {
-    area: "scatterChart",
-    src: scatterplotChartImage,
-    width: 286,
-    height: 338,
-    sizes: "(max-width: 768px) 28vw, 273px",
   },
 ];
 

@@ -1,4 +1,4 @@
-import { ScatterplotChartBar } from "@/components/charts";
+import { ScatterplotChart, ScatterplotChartBar } from "@/components/charts";
 import Image, { type StaticImageData } from "next/image";
 import type { ReactNode } from "react";
 import { DashboardChartImage } from "./DashboardChartImage";
@@ -59,6 +59,9 @@ export function AnalysisDashboard({
               </div>
               <div className={styles.overlayGrid}>
                 <div className={styles.chartsCluster}>
+                  <GridCell area="scatterChart">
+                    <ScatterplotChart className={styles.gridChart} />
+                  </GridCell>
                   {chartsClusterCharts.map((chart) => (
                     <GridCell key={chart.area} area={chart.area}>
                       <DashboardChartImage {...chart} />

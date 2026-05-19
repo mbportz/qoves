@@ -257,6 +257,7 @@ $container-height: 157;
   &[data-grid-area="scatterChart"] {
     @include sized-chart-cell($scatter-chart-width, $scatter-chart-height);
     grid-area: scatterChart;
+    pointer-events: auto;
   }
 
   &[data-grid-area="bellCurve"] {
