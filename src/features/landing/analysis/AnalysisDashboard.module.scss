@@ -281,6 +281,7 @@ $container-height: 157;
     @include sized-chart-cell($feature-width, $feature-height);
     grid-area: feature;
     overflow: visible;
+    pointer-events: auto;
   }
 
   &[data-grid-area="container"] {
@@ -301,6 +302,7 @@ $container-height: 157;
 .gridCell[data-grid-area="scatterChart"],
 .gridCell[data-grid-area="scatterBar"],
 .gridCell[data-grid-area="bellCurve"],
+.gridCell[data-grid-area="feature"],
 .gridCell[data-grid-area="container"] {
   .gridChart {
     object-position: center center;

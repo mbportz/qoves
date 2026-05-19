@@ -1,6 +1,7 @@
 import {
   BellCurveChart,
   ContainerChart,
+  FeatureContainerChart,
   HalfBlocksChart,
   ScatterplotChart,
   ScatterplotChartBar,
@@ -87,6 +88,9 @@ export function AnalysisDashboard({
                   </GridCell>
                   <GridCell area="container">
                     <ContainerChart className={styles.gridChart} />
+                  </GridCell>
+                  <GridCell area="feature">
+                    <FeatureContainerChart className={styles.gridChart} />
                   </GridCell>
                   {metricsClusterCharts.map((chart) => (
                     <GridCell key={chart.area} area={chart.area}>

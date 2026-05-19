@@ -1,6 +1,7 @@
 export { AnalysisChart } from "./AnalysisChart/AnalysisChart";
 export { BellCurveChart } from "./BellCurveChart/BellCurveChart";
 export { ContainerChart } from "./ContainerChart/ContainerChart";
+export { FeatureContainerChart } from "./FeatureContainerChart/FeatureContainerChart";
 export { HalfBlocksChart } from "./HalfBlocksChart/HalfBlocksChart";
 export { ScatterplotChart } from "./ScatterplotChart/ScatterplotChart";
 export { ScatterplotChartBar } from "./ScatterplotChartBar/ScatterplotChartBar";
