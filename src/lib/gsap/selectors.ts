@@ -27,6 +27,7 @@ export const storySelectors = {
   video: "[data-story-video]",
   filter: "[data-story-filter]",
   copy: "[data-story-copy]",
+  mobileAction: "[data-story-mobile-action]",
   card: "[data-story-card]",
   cardsRow: "[data-story-cards-row]",
   vanityBlock: "[data-story-stage-vanity]",

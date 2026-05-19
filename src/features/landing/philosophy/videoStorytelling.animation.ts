@@ -163,8 +163,17 @@ export function createVideoStorytellingAnimation(scope: HTMLElement) {
   const vanityCardsStage = q(storySelectors.vanityCardsStage)[0];
   const storyVideo = scope.querySelector<HTMLVideoElement>("[data-story-video] video");
 
-  gsap.set([copy, cards], { opacity: 0, y: 32 });
+  const mobileAction = q(storySelectors.mobileAction)[0];
+  const questionsIntro = [copy, mobileAction].filter(
+    (el): el is HTMLElement => Boolean(el),
+  );
+
+  gsap.set(cards, { opacity: 0, y: 32 });
   gsap.set(vanityCards, { autoAlpha: 0, y: 32 });
+
+  if (questionsIntro.length) {
+    gsap.set(questionsIntro, { opacity: 0, y: 24 });
+  }
   if (vanityHero) {
     gsap.set(vanityHero, { autoAlpha: 0, y: -vanityHeroEnterOffset });
   }
@@ -179,8 +188,8 @@ export function createVideoStorytellingAnimation(scope: HTMLElement) {
   });
   scrollTriggers.push(playTrigger);
 
-  if (copy) {
-    revealOnEnter(copy, scope, scrollTriggers, "top 80%");
+  if (questionsIntro.length) {
+    revealOnEnter(questionsIntro, scope, scrollTriggers, "top 80%");
   }
 
   if (cards.length && cardsRow) {

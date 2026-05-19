@@ -81,6 +81,7 @@ export function VideoStorytellingSection() {
                 <GlassActionButton
                   className={styles.mobileAction}
                   label={philosophySectionContent.mobileActionLabel}
+                  data-story-mobile-action
                 />
 
                 <div className={styles.cardsRow} data-story-cards-row>

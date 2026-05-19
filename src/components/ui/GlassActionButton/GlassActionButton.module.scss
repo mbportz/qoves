@@ -3,7 +3,21 @@
 $glass-action-width: 212px;
 $glass-action-height: 48px;
 $glass-action-surface: rgb(255 255 255 / 20%);
+$glass-action-surface-hover: rgb(255 255 255 / 28%);
 $glass-action-icon-surface: rgb(255 255 255 / 10%);
+$glass-action-icon-surface-hover: rgb(255 255 255 / 18%);
+$glass-action-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+@keyframes glass-action-chevron-nudge {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(4px);
+  }
+}
 
 .root {
   display: inline-flex;
@@ -23,6 +37,26 @@ $glass-action-icon-surface: rgb(255 255 255 / 10%);
   color: var(--color-text-button-primary);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  transition:
+    transform 0.25s $glass-action-ease,
+    background-color 0.25s $glass-action-ease,
+    box-shadow 0.25s $glass-action-ease;
+
+  &:hover {
+    background: $glass-action-surface-hover;
+    box-shadow: 0 8px 24px rgb(0 0 0 / 18%);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgb(0 0 0 / 14%);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgb(255 255 255 / 45%);
+    outline-offset: 2px;
+  }
 }
 
 .label {
@@ -42,4 +76,46 @@ $glass-action-icon-surface: rgb(255 255 255 / 10%);
   padding: 12px;
   border-radius: 6px;
   background: $glass-action-icon-surface;
+  transition: background-color 0.25s $glass-action-ease;
+
+  :global(img) {
+    transition: transform 0.25s $glass-action-ease;
+  }
+}
+
+.root:hover .iconButton,
+.root:focus-visible .iconButton {
+  background: $glass-action-icon-surface-hover;
+}
+
+.root:hover .iconButton :global(img),
+.root:focus-visible .iconButton :global(img) {
+  animation: none;
+  transform: translateX(3px);
+}
+
+.root[data-animated] .iconButton :global(img) {
+  animation: glass-action-chevron-nudge 2.4s $glass-action-ease infinite;
+  animation-delay: 1.2s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root {
+    transition: background-color 0.2s ease;
+
+    &:hover,
+    &:active {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
+  .root[data-animated] .iconButton :global(img) {
+    animation: none;
+  }
+
+  .root:hover .iconButton :global(img),
+  .root:focus-visible .iconButton :global(img) {
+    transform: none;
+  }
 }

@@ -10,6 +10,7 @@ type GlassActionButtonProps = {
   label: string;
   iconButtonLabel?: string;
   className?: string;
+  animated?: boolean;
   onAction?: () => void;
 } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children" | "onClick">;
 
@@ -17,6 +18,7 @@ export function GlassActionButton({
   label,
   iconButtonLabel,
   className,
+  animated = true,
   onAction,
   type = "button",
   ...props
@@ -27,6 +29,7 @@ export function GlassActionButton({
     <button
       type={type}
       className={cn(styles.root, className)}
+      data-animated={animated ? "" : undefined}
       aria-label={ariaLabel}
       onClick={onAction}
       {...props}
