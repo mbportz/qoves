@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "sync:videos": "mkdir -p public/videos && cp -f src/assets/landing-video.mp4 public/videos/landing-video.mp4",
+    "sync:videos": "mkdir -p public/videos && cp -f src/assets/video/landing-video.mp4 public/videos/landing-video.mp4",
     "generate:charts": "node scripts/generate-chart-svg-markup.mjs",
     "predev": "npm run generate:charts && npm run sync:videos",
     "prebuild": "npm run generate:charts && npm run sync:videos",

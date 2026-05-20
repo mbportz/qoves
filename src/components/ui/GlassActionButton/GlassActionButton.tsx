@@ -2,7 +2,7 @@
 
 import type { ButtonHTMLAttributes } from "react";
 import Image from "next/image";
-import chevronIcon from "@/assets/Chevron.svg";
+import chevronIcon from "@/assets/icons/chevron.svg";
 import { cn } from "@/lib/utils/cn";
 import styles from "./GlassActionButton.module.scss";
 

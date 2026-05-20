@@ -1,4 +1,4 @@
-/** Synced with `src/assets/motion_lines.svg` */
+/** Synced with `src/assets/hero/motion-lines.svg` */
 export const MOTION_LINE_VIEWBOX = { width: 1354, height: 527 } as const;
 
 /** Seconds for one full lap along `MOTION_LINE_PATH`. */

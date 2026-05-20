@@ -1,6 +1,6 @@
 "use client";
 
-import { ChartSvgDisplay } from "@/components/charts/ChartSvgDisplay";
+import { ChartSvgDisplay } from "../svg";
 import { motion, shouldSimplifyMotion } from "@/lib/gsap";
 import gsap from "gsap";
 import { useRef } from "react";

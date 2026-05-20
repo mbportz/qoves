@@ -15,7 +15,7 @@ npm run dev
 | `npm run build` | Production build |
 | `npm run start` | Serve production build |
 | `npm run lint` | ESLint |
-| `npm run sync:videos` | Copies `src/assets/landing-video.mp4` → `public/videos` (runs before `dev` / `build`) |
+| `npm run sync:videos` | Copies `src/assets/video/landing-video.mp4` → `public/videos` (runs before `dev` / `build`) |
 
 ---
 
@@ -30,7 +30,7 @@ src/components/          → shared UI, layout chrome, charts
 src/lib/                 → GSAP system, utilities
 src/styles/              → design tokens, mixins, global SCSS
 src/data/                → static chart / interaction data
-src/assets/              → images, SVGs, video source files
+src/assets/              → images, SVGs, video (see `src/assets/README.md`)
 ```
 
 **Composition flow**
@@ -143,7 +143,7 @@ Static content and section copy live beside features (e.g. `analysisContent.ts`,
 ## Assets
 
 - **Raster / SVG** — `src/assets/` (Figma exports: charts, portrait, icons).
-- **Video** — source at `src/assets/landing-video.mp4`, synced to `public/videos/` for Next static serving.
+- **Video** — source at `src/assets/video/landing-video.mp4`, synced to `public/videos/` for Next static serving.
 
 Design reference files at repo root: `Colors.md`, `Fonts.md`, `FRONTEND-PLAN.md`.
 

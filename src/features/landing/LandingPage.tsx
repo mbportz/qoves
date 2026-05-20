@@ -1,6 +1,6 @@
 import { SectionSpacer } from "@/components/layout";
 import { Footer } from "@/components/layout/Footer";
-import { FacialAnalysisSection } from "./analysis/FacialAnalysisSection";
+import { FacialAnalysisSection } from "./analysis";
 import { FaqSection } from "./faq/FaqSection";
 import { HeroSection } from "./hero/HeroSection";
 import styles from "./LandingPage.module.scss";

@@ -1,7 +1,7 @@
 "use client";
 
-import beforePhoto from "@/assets/Before.png";
-import afterPhoto from "@/assets/After.png";
+import beforePhoto from "@/assets/photos/before.png";
+import afterPhoto from "@/assets/photos/after.png";
 import { BeforeAfterCard } from "@/components/ui/BeforeAfterCard/BeforeAfterCard";
 import { HoverCard } from "@/components/ui/HoverCard/HoverCard";
 import { SectionLabel } from "@/components/ui/SectionLabel/SectionLabel";

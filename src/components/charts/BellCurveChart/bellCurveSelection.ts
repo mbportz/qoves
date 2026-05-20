@@ -7,12 +7,12 @@ export const BELL_CURVE_PLOT = {
   plotBottom: 141,
 } as const;
 
-/** Baseline Y used by the original fill wedges in `Bell_curve_Chart.svg`. */
+/** Baseline Y used by the original fill wedges in `assets/charts/bell-curve.svg`. */
 const BELL_BASELINE_Y = 140.136;
 
 /**
  * Top edge of the distribution, extracted from the white outline path
- * (`Bell_curve_Chart.svg` line 114) — left half through peak through right half.
+ * (`bell-curve.svg` line 114) — left half through peak through right half.
  */
 const BELL_CURVE_TOP_EDGE =
   "M14.3606 132.189V132.478C59.077 132.478 84.9602 108.137 104.693 83.8537C109.625 77.7849 114.176 71.7147 118.538 66.0325C122.902 60.3471 127.076 55.0498 131.263 50.5118C139.644 41.4291 148.025 35.4431 157.999 35.4431C167.98 35.4431 177.221 41.4373 186.168 50.5186C195.11 59.596 203.709 71.7042 212.417 83.8399C221.116 95.9648 229.924 108.116 239.268 117.234C248.611 126.35 258.533 132.478 269.467 132.478";

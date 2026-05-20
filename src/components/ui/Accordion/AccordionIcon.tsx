@@ -1,10 +1,10 @@
 "use client";
 
 import Image, { type StaticImageData } from "next/image";
-import collapseIcon from "@/assets/collapse.svg";
-import closeIcon from "@/assets/Close Icon.svg";
-import plusIcon from "@/assets/Plus Icon.svg";
-import uncollapseIcon from "@/assets/uncollapse.svg";
+import collapseIcon from "@/assets/icons/collapse.svg";
+import closeIcon from "@/assets/icons/close.svg";
+import plusIcon from "@/assets/icons/plus.svg";
+import uncollapseIcon from "@/assets/icons/uncollapse.svg";
 import styles from "./Accordion.module.scss";
 
 const ICONS = {

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useId, useState, type ReactNode } from "react";
-import beforeAmbient from "@/assets/Before 5676.png";
+import beforeAmbient from "@/assets/ambient/before-large.png";
 import { cn } from "@/lib/utils/cn";
 import { AccordionIcon } from "./AccordionIcon";
 import styles from "./Accordion.module.scss";

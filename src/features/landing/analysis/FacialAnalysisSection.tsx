@@ -1,12 +1,12 @@
 "use client";
 
-import beforeAmbient from "@/assets/Before.png";
-import facialAnalysisDesktop from "@/assets/Facial_analysis.png";
-import facialAnalysisMobile from "@/assets/Facial_analysys_half_body.png";
+import beforeAmbient from "@/assets/photos/before.png";
+import facialAnalysisDesktop from "@/assets/facial-analysis/desktop.png";
+import facialAnalysisMobile from "@/assets/facial-analysis/mobile-half-body.png";
 import Image from "next/image";
 import { SectionLabel } from "@/components/ui/SectionLabel/SectionLabel";
 import { useSectionAnimation } from "@/lib/gsap";
-import { AnalysisDashboard } from "./AnalysisDashboard";
+import { AnalysisDashboard } from "./dashboard";
 import { analysisSectionContent } from "./analysisContent";
 import { createAnalysisAnimation } from "./analysis.animation";
 import styles from "./FacialAnalysisSection.module.scss";

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import beforeAmbient from "@/assets/Before 5676.png";
+import beforeAmbient from "@/assets/ambient/before-large.png";
 import { SectionLabel } from "@/components/ui/SectionLabel/SectionLabel";
 import { FaqCategoryEntries } from "./FaqCategoryEntries";
 import { FaqCategoryPanel } from "./FaqCategoryPanel";

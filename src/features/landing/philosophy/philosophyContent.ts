@@ -1,7 +1,7 @@
 import type { StaticImageData } from "next/image";
-import culturalBeautyStandardsImage from "@/assets/Cultural_Beauty_Standards.svg";
-import geneticFactorsImage from "@/assets/Genetic_Factors.svg";
-import lifestyleFactorsImage from "@/assets/Lifestyle_Factors.svg";
+import culturalBeautyStandardsImage from "@/assets/philosophy/cultural-beauty-standards.svg";
+import geneticFactorsImage from "@/assets/philosophy/genetic-factors.svg";
+import lifestyleFactorsImage from "@/assets/philosophy/lifestyle-factors.svg";
 
 export type PhilosophyCard = {
   id: string;
