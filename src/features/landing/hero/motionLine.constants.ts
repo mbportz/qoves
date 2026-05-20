@@ -2,23 +2,51 @@
 export const MOTION_LINE_VIEWBOX = { width: 1354, height: 527 } as const;
 
 /** Seconds for one full lap along `MOTION_LINE_PATH`. */
-export const MOTION_DOT_DURATION = 18;
+export const MOTION_DOT_DURATION = 12;
 
 /** Comet tail: SMIL ghost segments (count + arc-length along path). */
-export const MOTION_DOT_TRAIL_COUNT = 32;
-export const MOTION_DOT_TRAIL_LENGTH = 0.024;
+export const MOTION_DOT_TRAIL_COUNT = 140;
+export const MOTION_DOT_TRAIL_LENGTH = 0.03;
+
+/** Matches `.framePath` `stroke-width` in `HeroMotionFrame.module.scss`. */
+export const MOTION_LINE_STROKE_WIDTH = 1.02;
+
+/** Square lead dot on the connector path (viewBox units; was 7 in Figma export). */
+export const MOTION_DOT_HEAD_SIZE = 4;
+
+/** Base scale for trail body thickness constant. */
+export const MOTION_DOT_TRAIL_BODY_RADIUS = 5;
+
+/** Thick solid trail at the head (viewBox units). */
+export const MOTION_DOT_TRAIL_HEAD_RADIUS =
+  MOTION_DOT_TRAIL_BODY_RADIUS * (0.1 + 0.22 * 0.99);
+
+/** Thin tail end — matches connector stroke width. */
+export const MOTION_DOT_TRAIL_END_RADIUS = MOTION_LINE_STROKE_WIDTH / 2;
+
+/** Fraction of tail length (0→1) that stays fully solid at the head. */
+export const MOTION_DOT_TRAIL_SOLID_PORTION = 0.22;
+
+/** Progress along tail (0→1) where blur begins on the fading end. */
+export const MOTION_DOT_TRAIL_BLUR_START = 0.48;
+
+/** Opacity at the tail end. */
+export const MOTION_DOT_TRAIL_END_OPACITY = 0.14;
+
+/** Blur on `#hero-trail-blur` (tail end only). */
+export const MOTION_DOT_TRAIL_BLUR = 0.5;
 
 /**
  * Arc-length offsets (0–1) along `MOTION_LINE_PATH` for dot start positions.
- * Measured at the horizontal bridge midpoints between frames.
+ * Upper bridge → after-frame corner; lower bridge → before-frame corner.
  */
-export const MOTION_DOT_OFFSET_TOP = 0.9515;
-export const MOTION_DOT_OFFSET_BOTTOM = 0.4515;
+export const MOTION_DOT_OFFSET_TOP = 0.9029;
+export const MOTION_DOT_OFFSET_BOTTOM = 0.4029;
 
-/** Bridge midpoints — static fallback when motion is reduced. */
+/** Bridge corners — static fallback when motion is reduced. */
 export const MOTION_DOT_POSITIONS = {
-  top: { cx: 676.4, cy: 241.5 },
-  bottom: { cx: 676.6, cy: 284.5 },
+  top: { cx: 889.966, cy: 221.077 },
+  bottom: { cx: 463.054, cy: 304.926 },
 } as const;
 
 /** SMIL `keyPoints` / `keyTimes` for a full clockwise lap from `offset` (0–1). */
@@ -33,16 +61,47 @@ export function motionDotKeyTimes(offset: number) {
 
 /** Path position for a trail segment trailing `headOffset` by `trailIndex`. */
 export function motionTrailOffset(headOffset: number, trailIndex: number) {
-  const step =
-    ((trailIndex + 1) / MOTION_DOT_TRAIL_COUNT) * MOTION_DOT_TRAIL_LENGTH;
+  // `trailIndex` (not +1) so the first segment sits on the head — no path gap.
+  const step = (trailIndex / MOTION_DOT_TRAIL_COUNT) * MOTION_DOT_TRAIL_LENGTH;
   const offset = headOffset - step;
   return ((offset % 1) + 1) % 1;
 }
 
-/** Brightness scale for trail segment `trailIndex` (0 = closest to head). */
-export function motionTrailFade(trailIndex: number) {
-  const t = 1 - (trailIndex + 1) / MOTION_DOT_TRAIL_COUNT;
-  return 0.58 + 0.42 * t;
+function smoothstep(amount: number) {
+  const t = Math.min(1, Math.max(0, amount));
+  return t * t * (3 - 2 * t);
+}
+
+/** 0 = against the head, 1 = tail end (away from the square). */
+export function motionTrailProgress(trailIndex: number) {
+  const last = Math.max(MOTION_DOT_TRAIL_COUNT - 1, 1);
+  return trailIndex / last;
+}
+
+export function motionTrailUsesBlur(trailIndex: number) {
+  return motionTrailProgress(trailIndex) > MOTION_DOT_TRAIL_BLUR_START;
+}
+
+export function motionTrailCircleRadius(trailIndex: number) {
+  const t = smoothstep(motionTrailProgress(trailIndex));
+  return (
+    MOTION_DOT_TRAIL_HEAD_RADIUS +
+    (MOTION_DOT_TRAIL_END_RADIUS - MOTION_DOT_TRAIL_HEAD_RADIUS) * t
+  );
+}
+
+export function motionTrailOpacity(trailIndex: number) {
+  const progress = motionTrailProgress(trailIndex);
+
+  if (progress <= MOTION_DOT_TRAIL_SOLID_PORTION) {
+    return 1;
+  }
+
+  const fade =
+    (progress - MOTION_DOT_TRAIL_SOLID_PORTION) /
+    (1 - MOTION_DOT_TRAIL_SOLID_PORTION);
+
+  return 1 - smoothstep(fade) * (1 - MOTION_DOT_TRAIL_END_OPACITY);
 }
 
 /** Single continuous path: both frames + upper & lower connectors (closed with Z). */

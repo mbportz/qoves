@@ -2,6 +2,7 @@ import type { HTMLAttributes, ReactNode } from "react";
 import {
   MOTION_DOT_OFFSET_BOTTOM,
   MOTION_DOT_OFFSET_TOP,
+  MOTION_DOT_TRAIL_BLUR,
   MOTION_FRAMES,
   MOTION_LINE_PATH,
   MOTION_LINE_VIEWBOX,
@@ -66,7 +67,7 @@ export function HeroMotionFrame({ before, after }: HeroMotionFrameProps) {
             height="260%"
             colorInterpolationFilters="sRGB"
           >
-            <feGaussianBlur stdDeviation="0.85" />
+            <feGaussianBlur stdDeviation={MOTION_DOT_TRAIL_BLUR} />
           </filter>
         </defs>
         <g
