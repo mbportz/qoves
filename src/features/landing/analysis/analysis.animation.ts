@@ -9,7 +9,8 @@ import {
   getScrollTriggerConfig,
   killScopeScrollTriggers,
   mediaDesktop,
-  mediaMobile,
+  mediaMobileOnly,
+  mediaNarrow,
   motion,
   sectionSelectors,
   shouldSimplifyMotion,
@@ -59,6 +60,26 @@ function bindAnalysisPortraitZoom(scope: HTMLElement, portrait: Element) {
 
   return () => {
     trigger.kill();
+  };
+}
+
+/** ≤375px — no scroll reveals, zoom, or hover lift in the analysis section. */
+function setupAnalysisStatic(scope: HTMLElement) {
+  const q = gsap.utils.selector(scope);
+
+  gsap.set(q(sectionSelectors.badge), { opacity: 1, y: 0 });
+  gsap.set(q(sectionSelectors.title), { opacity: 1, y: 0 });
+  gsap.set(q(sectionSelectors.subtitle), { opacity: 1, y: 0 });
+  gsap.set(q(sectionSelectors.item), { opacity: 1, y: 0 });
+  // Do not set scale/transform on [data-analysis-layer] — layout uses CSS transforms.
+  gsap.set(q(analysisSelectors.layer), { clearProps: "opacity,scale,transform" });
+  gsap.set(q(analysisSelectors.portrait), { clearProps: "transform" });
+
+  requestAnimationFrame(() => ScrollTrigger.refresh());
+
+  return () => {
+    clearAnalysisMotionStyles(scope);
+    requestAnimationFrame(() => ScrollTrigger.refresh());
   };
 }
 
@@ -118,7 +139,8 @@ function setupAnalysisMotion(scope: HTMLElement, desktop: boolean) {
 export function createAnalysisAnimation(scope: HTMLElement) {
   const mm = gsap.matchMedia();
 
-  mm.add(mediaMobile, () => setupAnalysisMotion(scope, false));
+  mm.add(mediaNarrow, () => setupAnalysisStatic(scope));
+  mm.add(mediaMobileOnly, () => setupAnalysisMotion(scope, false));
   mm.add(mediaDesktop, () => setupAnalysisMotion(scope, true));
 
   return () => {

@@ -8,9 +8,13 @@ export type {
 export { prefersReducedMotion } from "./reducedMotion";
 export {
   BREAKPOINT_SM_PX,
+  BREAKPOINT_XXS_PX,
   mediaDesktop,
   mediaMobile,
+  mediaMobileOnly,
+  mediaNarrow,
   isMobileViewport,
+  isNarrowViewport,
   isTabletViewport,
   shouldSimplifyMotion,
 } from "./responsive";
