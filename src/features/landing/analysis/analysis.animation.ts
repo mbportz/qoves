@@ -9,8 +9,7 @@ import {
   getScrollTriggerConfig,
   killScopeScrollTriggers,
   mediaDesktop,
-  mediaMobileOnly,
-  mediaNarrow,
+  mediaMobile,
   motion,
   sectionSelectors,
   shouldSimplifyMotion,
@@ -98,11 +97,17 @@ function setupAnalysisMotion(scope: HTMLElement, desktop: boolean) {
     subtitleOverlap: "loose",
   });
 
-  addSectionItemsReveal(tl, q, {
-    preset: desktop ? "fadeUpXl" : "fadeUpMd",
-    stagger: "tight",
-    overlap: "base",
-  });
+  if (desktop) {
+    addSectionItemsReveal(tl, q, {
+      preset: "fadeUpXl",
+      stagger: "tight",
+      overlap: "base",
+    });
+  } else {
+    // Phones/tablets: never fade the dashboard wrapper — it hid all charts on mobile Chrome.
+    gsap.set(q(sectionSelectors.item), { opacity: 1, y: 0 });
+    gsap.set(q(analysisSelectors.layer), { clearProps: "opacity,scale,transform" });
+  }
 
   const layers = q(analysisSelectors.layer);
   const portrait = q(analysisSelectors.portrait)[0];
@@ -139,8 +144,7 @@ function setupAnalysisMotion(scope: HTMLElement, desktop: boolean) {
 export function createAnalysisAnimation(scope: HTMLElement) {
   const mm = gsap.matchMedia();
 
-  mm.add(mediaNarrow, () => setupAnalysisStatic(scope));
-  mm.add(mediaMobileOnly, () => setupAnalysisMotion(scope, false));
+  mm.add(mediaMobile, () => setupAnalysisStatic(scope));
   mm.add(mediaDesktop, () => setupAnalysisMotion(scope, true));
 
   return () => {

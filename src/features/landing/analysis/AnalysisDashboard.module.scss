@@ -448,6 +448,8 @@ $container-height: 157;
     min-height: $analysis-card-height;
     padding-bottom: 0;
     overflow: visible;
+    opacity: 1;
+    visibility: visible;
   }
 
   .canvas {

@@ -1,9 +1,13 @@
 "use client";
 
-import containerChartSrc from "@/assets/Container.svg";
+import { ChartSvgImage } from "@/components/charts/ChartSvgImage";
+import displayStyles from "@/components/charts/chartDisplay.module.scss";
+import { injectChartMarkup } from "@/components/charts/injectChartMarkup";
+import { useChartSvgMarkup } from "@/components/charts/useChartSvgMarkup";
+import { mediaMobile } from "@/lib/gsap/responsive";
 import { motion, shouldSimplifyMotion } from "@/lib/gsap";
 import gsap from "gsap";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import {
   CONTAINER_CHART_VIEWBOX,
   collectContainerRows,
@@ -53,32 +57,20 @@ function tweenRows(
 export function ContainerChart({ className }: ContainerChartProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<HTMLDivElement>(null);
-  const [markup, setMarkup] = useState<string | null>(null);
+  const { markup, dataUri } = useChartSvgMarkup("container");
 
   useEffect(() => {
-    let cancelled = false;
+    if (window.matchMedia(mediaMobile).matches) {
+      return undefined;
+    }
 
-    void fetch(containerChartSrc.src)
-      .then((response) => response.text())
-      .then((svg) => {
-        if (!cancelled) {
-          setMarkup(svg);
-        }
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  useEffect(() => {
     const host = chartRef.current;
     const root = rootRef.current;
     if (!markup || !host || !root) {
       return undefined;
     }
 
-    host.innerHTML = markup;
+    injectChartMarkup(host, markup);
 
     const rows = collectContainerRows(host);
     if (!rows) {
@@ -110,14 +102,24 @@ export function ContainerChart({ className }: ContainerChartProps) {
 
   return (
     <div ref={rootRef} className={`${styles.root} ${className ?? ""}`.trim()}>
-      <div
-        ref={chartRef}
-        className={styles.chart}
-        aria-hidden
-        style={{
-          aspectRatio: `${CONTAINER_CHART_VIEWBOX.width} / ${CONTAINER_CHART_VIEWBOX.height}`,
-        }}
-      />
+      <div className={displayStyles.mobileChart}>
+        <ChartSvgImage
+          dataUri={dataUri}
+          width={CONTAINER_CHART_VIEWBOX.width}
+          height={CONTAINER_CHART_VIEWBOX.height}
+          className={styles.chart}
+        />
+      </div>
+      <div className={displayStyles.desktopChart}>
+        <div
+          ref={chartRef}
+          className={styles.chart}
+          aria-hidden
+          style={{
+            aspectRatio: `${CONTAINER_CHART_VIEWBOX.width} / ${CONTAINER_CHART_VIEWBOX.height}`,
+          }}
+        />
+      </div>
     </div>
   );
 }

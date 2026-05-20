@@ -2,7 +2,6 @@
 
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import { prefersReducedMotion } from "./reducedMotion";
 import { registerGsapPlugins } from "./register";
 import type { SectionAnimationFactory } from "./types";
 
@@ -23,7 +22,7 @@ export function useSectionAnimation(
       registerGsapPlugins();
 
       const scope = scopeRef.current;
-      if (!scope || prefersReducedMotion()) {
+      if (!scope) {
         return;
       }
 

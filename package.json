@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "sync:videos": "mkdir -p public/videos && cp -f src/assets/landing-video.mp4 public/videos/landing-video.mp4",
-    "predev": "npm run sync:videos",
-    "prebuild": "npm run sync:videos",
+    "generate:charts": "node scripts/generate-chart-svg-markup.mjs",
+    "predev": "npm run generate:charts && npm run sync:videos",
+    "prebuild": "npm run generate:charts && npm run sync:videos",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

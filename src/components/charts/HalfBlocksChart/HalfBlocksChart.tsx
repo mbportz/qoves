@@ -1,9 +1,13 @@
 "use client";
 
-import halfBlocksChartSrc from "@/assets/Half_Blocks.svg";
+import { ChartSvgImage } from "@/components/charts/ChartSvgImage";
+import displayStyles from "@/components/charts/chartDisplay.module.scss";
+import { injectChartMarkup } from "@/components/charts/injectChartMarkup";
+import { useChartSvgMarkup } from "@/components/charts/useChartSvgMarkup";
+import { mediaMobile } from "@/lib/gsap/responsive";
 import { motion, shouldSimplifyMotion } from "@/lib/gsap";
 import gsap from "gsap";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import {
   HALF_BLOCKS_VIEWBOX,
   applyHalfBlocksPositions,
@@ -52,32 +56,20 @@ function tweenScoreChart(
 export function HalfBlocksChart({ className }: HalfBlocksChartProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<HTMLDivElement>(null);
-  const [markup, setMarkup] = useState<string | null>(null);
+  const { markup, dataUri } = useChartSvgMarkup("halfBlocks");
 
   useEffect(() => {
-    let cancelled = false;
+    if (window.matchMedia(mediaMobile).matches) {
+      return undefined;
+    }
 
-    void fetch(halfBlocksChartSrc.src)
-      .then((response) => response.text())
-      .then((svg) => {
-        if (!cancelled) {
-          setMarkup(svg);
-        }
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  useEffect(() => {
     const host = chartRef.current;
     const root = rootRef.current;
     if (!markup || !host || !root) {
       return undefined;
     }
 
-    host.innerHTML = markup;
+    injectChartMarkup(host, markup);
 
     const parts = collectHalfBlocksChart(host);
     if (!parts) {
@@ -109,14 +101,24 @@ export function HalfBlocksChart({ className }: HalfBlocksChartProps) {
 
   return (
     <div ref={rootRef} className={`${styles.root} ${className ?? ""}`.trim()}>
-      <div
-        ref={chartRef}
-        className={styles.chart}
-        aria-hidden
-        style={{
-          aspectRatio: `${HALF_BLOCKS_VIEWBOX.width} / ${HALF_BLOCKS_VIEWBOX.height}`,
-        }}
-      />
+      <div className={displayStyles.mobileChart}>
+        <ChartSvgImage
+          dataUri={dataUri}
+          width={HALF_BLOCKS_VIEWBOX.width}
+          height={HALF_BLOCKS_VIEWBOX.height}
+          className={styles.chart}
+        />
+      </div>
+      <div className={displayStyles.desktopChart}>
+        <div
+          ref={chartRef}
+          className={styles.chart}
+          aria-hidden
+          style={{
+            aspectRatio: `${HALF_BLOCKS_VIEWBOX.width} / ${HALF_BLOCKS_VIEWBOX.height}`,
+          }}
+        />
+      </div>
     </div>
   );
 }

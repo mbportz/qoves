@@ -1,0 +1,18 @@
+@use "@/styles/mixins" as *;
+
+.mobileChart {
+  display: none;
+  width: 100%;
+
+  @include down(sm) {
+    display: block;
+  }
+}
+
+.desktopChart {
+  width: 100%;
+
+  @include down(sm) {
+    display: none;
+  }
+}
