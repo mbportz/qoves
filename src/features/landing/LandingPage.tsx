@@ -5,6 +5,7 @@ import { FaqSection } from "./faq/FaqSection";
 import { HeroSection } from "./hero/HeroSection";
 import styles from "./LandingPage.module.scss";
 import { VideoStorytellingSection } from "./philosophy/VideoStorytellingSection";
+import { Analytics } from '@vercel/analytics/next';
 
 export function LandingPage() {
   return (
@@ -19,6 +20,7 @@ export function LandingPage() {
       <SectionSpacer />
       <VideoStorytellingSection />
       <Footer />
+      <Analytics />
     </div>
   );
 }
