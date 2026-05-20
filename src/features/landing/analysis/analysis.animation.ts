@@ -62,7 +62,7 @@ function bindAnalysisPortraitZoom(scope: HTMLElement, portrait: Element) {
   };
 }
 
-/** ≤375px — no scroll reveals, zoom, or hover lift in the analysis section. */
+/** Mobile — no scroll reveals, zoom, or hover lift. */
 function setupAnalysisStatic(scope: HTMLElement) {
   const q = gsap.utils.selector(scope);
 
@@ -82,7 +82,7 @@ function setupAnalysisStatic(scope: HTMLElement) {
   };
 }
 
-function setupAnalysisMotion(scope: HTMLElement, desktop: boolean) {
+function setupAnalysisMotion(scope: HTMLElement) {
   const q = gsap.utils.selector(scope);
 
   const tl = createMotionTimeline({
@@ -97,22 +97,16 @@ function setupAnalysisMotion(scope: HTMLElement, desktop: boolean) {
     subtitleOverlap: "loose",
   });
 
-  if (desktop) {
-    addSectionItemsReveal(tl, q, {
-      preset: "fadeUpXl",
-      stagger: "tight",
-      overlap: "base",
-    });
-  } else {
-    // Phones/tablets: never fade the dashboard wrapper — it hid all charts on mobile Chrome.
-    gsap.set(q(sectionSelectors.item), { opacity: 1, y: 0 });
-    gsap.set(q(analysisSelectors.layer), { clearProps: "opacity,scale,transform" });
-  }
+  addSectionItemsReveal(tl, q, {
+    preset: "fadeUpXl",
+    stagger: "tight",
+    overlap: "base",
+  });
 
   const layers = q(analysisSelectors.layer);
   const portrait = q(analysisSelectors.portrait)[0];
 
-  if (desktop && layers.length) {
+  if (layers.length) {
     tl.from(
       layers,
       {
@@ -125,9 +119,10 @@ function setupAnalysisMotion(scope: HTMLElement, desktop: boolean) {
     );
   }
 
-  const cleanupHover = desktop ? bindCardHoverLift(layers) : () => undefined;
-  const cleanupPortraitZoom =
-    desktop && portrait ? bindAnalysisPortraitZoom(scope, portrait) : () => undefined;
+  const cleanupHover = bindCardHoverLift(layers);
+  const cleanupPortraitZoom = portrait
+    ? bindAnalysisPortraitZoom(scope, portrait)
+    : () => undefined;
 
   requestAnimationFrame(() => ScrollTrigger.refresh());
 
@@ -145,7 +140,7 @@ export function createAnalysisAnimation(scope: HTMLElement) {
   const mm = gsap.matchMedia();
 
   mm.add(mediaMobile, () => setupAnalysisStatic(scope));
-  mm.add(mediaDesktop, () => setupAnalysisMotion(scope, true));
+  mm.add(mediaDesktop, () => setupAnalysisMotion(scope));
 
   return () => {
     mm.revert();

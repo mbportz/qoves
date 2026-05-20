@@ -3,7 +3,7 @@ import path from "node:path";
 
 const root = process.cwd();
 
-// Keep in sync with src/components/charts/sanitizeChartSvg.ts
+// Sanitize logic must match src/components/charts/sanitizeChartSvg.ts (build has no TS import).
 function sanitizeChartSvg(svg) {
   const withoutForeign = svg.replace(
     /<foreignObject[\s\S]*?<\/foreignObject>/gi,

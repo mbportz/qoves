@@ -1,4 +1,4 @@
-/** Apply inlined chart SVG so mobile browsers get explicit dimensions (not 0×0). */
+/** Inject build-time SVG into the desktop chart host (percent sizing inside aspect-ratio box). */
 export function injectChartMarkup(host: HTMLElement, markup: string) {
   host.innerHTML = markup;
 
